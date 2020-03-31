@@ -5,10 +5,12 @@ Event manager project for college course
 Make sure you are in event_manager directory using command `pwd`
 
 And then run following command to run the server:
+
 `python manage.py runserver`
 
 ## Requirements
 Python v3+
+
 django v2+
 
 ## Installation
@@ -26,6 +28,7 @@ To check if python is installed, use:
 
 ## Migrations
 To run migrations run the following commands in order:
+
 `python manage.py makemigrations`
 
 `python manage.py migrate`
