@@ -1,0 +1,17 @@
+pipeline {
+    agent none
+    stages {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'python:3-alpine'
+                }
+            }
+            steps {
+                sh 'pip install django'
+                sh 'pip install pymysql'
+                sh 'python event_manager/manage.py runserver'
+            }
+        }
+    }
+}
