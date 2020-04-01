@@ -8,9 +8,16 @@ pipeline {
                 }
             }
             steps {
-                sh 'sudo -H pip install django'
-                sh 'sudo -H pip install pymysql'
-                sh 'python event_manager/manage.py runserver'
+                withEnv(["HOME=${env.WORKSPACE}"]) {
+                    sh 'pip install django'
+                    sh 'pip install pymysql'
+                    sh 'python event_manager/manage.py runserver'
+                }
+            }
+            post {
+                always {
+                    junit 'output.xml'
+                }
             }
         }
     }
