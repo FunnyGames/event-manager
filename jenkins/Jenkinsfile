@@ -14,11 +14,6 @@ pipeline {
                     // sh 'python event_manager/manage.py runserver'
                 }
             }
-            post {
-                always {
-                    junit 'output.xml'
-                }
-            }
         }
         stage('Test') {
             agent {
@@ -31,6 +26,11 @@ pipeline {
                     sh 'pip install django'
                     sh 'pip install pymysql'
                     sh 'cd event_manager && python manage.py test'
+                }
+            }
+            post {
+                always {
+                    junit 'output.xml'
                 }
             }
         }
