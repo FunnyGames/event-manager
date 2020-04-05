@@ -11,11 +11,3 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class UserProfileInfo(models.Model):
-
-    user = models.OneToOneField(User)
-
-    def __str__(self):
-        return self.user.username
