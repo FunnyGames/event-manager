@@ -26,12 +26,13 @@ pipeline {
                     sh 'pip install django'
                     sh 'pip install pymysql'
                     sh 'pip install django-crispy-forms'
-                    sh 'cd event_manager && python manage.py test'
+                    sh 'cd event_manager && python manage.py test >> output.xml'
+                    sh 'ls -l'
                 }
             }
             post {
                 always {
-                    junit 'output.xml'
+                    junit 'event_manager/output.xml'
                 }
             }
         }
