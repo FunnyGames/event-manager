@@ -11,6 +11,7 @@ pipeline {
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     sh 'pip install django'
                     sh 'pip install pymysql'
+                    sh 'pip install django-crispy-forms'
                     // sh 'python event_manager/manage.py runserver'
                 }
             }
