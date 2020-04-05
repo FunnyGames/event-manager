@@ -28,7 +28,6 @@ pipeline {
                     sh 'pip install pymysql'
                     sh 'pip install django-crispy-forms'
                     sh 'cd event_manager && python manage.py test >> output.xml'
-                    sh 'ls -l'
                 }
             }
             post {
