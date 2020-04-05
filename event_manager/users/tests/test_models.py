@@ -24,6 +24,3 @@ class UserModelTest(TestCase):
         user = User.objects.get(id=1)
         field_label = user._meta.get_field('email').verbose_name
         self.assertEquals(field_label, 'email address')
-
-    def test_fail(self):
-        self.assertTrue(False)
