@@ -25,3 +25,6 @@ def home(request):
 
 def about(request):
     return render(request, 'event/about.html', {'title': 'About'})
+
+def event_list(request):
+    return render(request, 'event/event_list.html', {'title': 'Event_List'})
