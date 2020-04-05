@@ -20,5 +20,19 @@ pipeline {
                 }
             }
         }
+        stage('Test') {
+            agent {
+                docker {
+                    image 'python:3-alpine'
+                }
+            }
+            steps {
+                withEnv(["HOME=${env.WORKSPACE}"]) {
+                    sh 'pip install django'
+                    sh 'pip install pymysql'
+                    sh 'cd event_manager && python manage.py test'
+                }
+            }
+        }
     }
 }
