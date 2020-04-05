@@ -20,6 +20,9 @@ To install django, run the following command:
 To install MySQL, use:
 `pip install pymysql`
 
+To install crispy-forms, use:
+`pip install django-crispy-forms`
+
 To check if django is installed, use:
 `python -m django --version`
 
