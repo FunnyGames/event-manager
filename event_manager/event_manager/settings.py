@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 INSTALLED_APPS = [
     'event.apps.EventConfig',
     'users.apps.UsersConfig',
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -131,6 +132,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [STATIC_DIR, ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # MEDIA
 MEDIA_ROOT = MEDIA_DIR
