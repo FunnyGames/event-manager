@@ -3,36 +3,62 @@ from django.urls import reverse
 
 from django.contrib.auth.models import User
 
+
 class UserRegisterTest(TestCase):
-   
+
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get(reverse('register'))
         self.assertEqual(response.status_code, 200)
-           
+
     def test_view_uses_correct_template(self):
         response = self.client.get(reverse('register'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'users/register.html')
-        
+
 
 class UserLoginTest(TestCase):
+    def setUp(self):
+        # Create two users
+        test_user1 = User.objects.create_user(
+            username='testuser1', password='Aa123123')
+
+        test_user1.save()
 
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
-           
+
     def test_view_uses_correct_template(self):
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'users/login.html')
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse('profile'))
+        self.assertRedirects(
+            response, '/login/?next=/profile/')
+
+    def test_logged_in_uses_correct_template(self):
+        login = self.client.login(
+            username='testuser1', password='Aa123123')
+        response = self.client.get(reverse('profile'))
+
+        # Check our user is logged in
+        self.assertEqual(str(response.context['user']), 'testuser1')
+        # Check that we got a response "success"
+        self.assertEqual(response.status_code, 200)
+
+        # Check we used correct template
+        self.assertTemplateUsed(response, 'users/profile.html')
+
 
 class UserLogoutTest(TestCase):
 
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get(reverse('logout'))
         self.assertEqual(response.status_code, 200)
-           
+
     def test_view_uses_correct_template(self):
         response = self.client.get(reverse('logout'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/logout.html')       
+        self.assertTemplateUsed(response, 'users/logout.html')
