@@ -18,7 +18,6 @@ class UserRegisterTest(TestCase):
 
 class UserLoginTest(TestCase):
     def setUp(self):
-        # Create two users
         test_user1 = User.objects.create_user(
             username='testuser1', password='Aa123123')
 
