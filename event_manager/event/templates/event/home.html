@@ -20,6 +20,11 @@
     <p class="article-content">Capacity: {{ event.capacity }}</p>
     <p class="article-content">Place: {{ event.place }}</p>
     <h3 class="article-title">Announcmenets</h3>
+    {% for eventupdates_set in event.eventupdates_set.all %}
+    <div class="article-metadata" style="color: green !important;">
+      {{eventupdates_set.announcement}}
+    </div>
+    {% endfor %}
   </div>
 </article>
 {% endfor %} {% endblock content %}
