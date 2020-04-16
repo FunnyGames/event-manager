@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Event
 from .models import CancelledEvent
+from .models import EventUpdates
 
 # Create your views here.
 
@@ -11,7 +12,8 @@ CancelledEvent = CancelledEvent.objects.all()
 
 def home(request):
     context = {
-        'events': Event.exclude(id__in=CancelledEvent)
+        'events': Event.exclude(id__in=CancelledEvent).prefetch_related('eventupdates_set'),
+
     }
     return render(request, 'event/home.html', context)
 

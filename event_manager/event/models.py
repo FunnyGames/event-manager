@@ -27,7 +27,7 @@ class CancelledEvent(models.Model):
 
 
 class EventUpdates(models.Model):
-    EventId = models.IntegerField(default=0)
+    EventId = models.ForeignKey(Event, on_delete=models.CASCADE)
     announcement = models.TextField()
     create_date = models.DateTimeField(auto_now=True)
 
