@@ -4,11 +4,20 @@
 {% for event in events %}
 <article class="media content-section">
     <div class="media-body">
-        <div class="article-metadata">
-            <small class="text-muted">{{ event.date }}</small>
+        {% if event.cancelled %}
+        <div class="article-metadata" style="color: red!important;">
+            <b>This event is officially cancelled.</b>
         </div>
+        {% endif %}
+        <div class="article-metadata">
+            <small class="text-muted">{{ event.start_date }}</small>
+        </div>
+        <p class="article-content">Event ID: {{ event.id }}</p>
         <h2><a class="article-title" href="#">{{ event.title }}</a></h2>
         <p class="article-content">{{ event.description }}</p>
+        <p class="article-content">Date range: {{ event.start_date }} - {{ event.end_date }}</p>
+        <p class="article-content">Capacity: {{ event.capacity }}</p>
+        <p class="article-content">Place: {{ event.place }}</p>
     </div>
 </article>
 {% endfor %}
