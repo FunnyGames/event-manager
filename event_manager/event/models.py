@@ -16,3 +16,10 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+class CancelledEvent(models.Model):
+    EventId = models.IntegerField(default=0)
+    cancelled = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.EventId)
