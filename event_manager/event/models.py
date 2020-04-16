@@ -17,9 +17,19 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
+
 class CancelledEvent(models.Model):
     EventId = models.IntegerField(default=0)
     cancelled = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.EventId)
+
+
+class EventUpdates(models.Model):
+    EventId = models.IntegerField(default=0)
+    announcement = models.TextField()
+    create_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.EventId)

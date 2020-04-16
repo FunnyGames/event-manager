@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import Event
 from .models import CancelledEvent
 
@@ -6,6 +7,7 @@ from .models import CancelledEvent
 
 Event = Event.objects.all()
 CancelledEvent = CancelledEvent.objects.all()
+
 
 def home(request):
     context = {
