@@ -1,32 +1,10 @@
 {% extends "event/base.html" %} {% block content %}
-<h1>Events:</h1>
-{% for event in events %}
+<h1>Welcome to our website</h1>
+
 <article class="media content-section">
   <div class="media-body">
-    {% if event.cancelled %}
-    <div class="article-metadata" style="color: red !important;">
-      <b>This event is officially cancelled.</b>
-    </div>
-    {% endif %}
-    <div class="article-metadata">
-      <small class="text-muted">{{ event.start_date }}</small>
-    </div>
-    <p class="article-content">Event ID: {{ event.id }}</p>
-    <h2><a class="article-title" href="#">{{ event.title }}</a></h2>
-    <p class="article-content">{{ event.description }}</p>
-    <p class="article-content">
-      Date range: {{ event.start_date }} - {{ event.end_date }}
-    </p>
-    <p class="article-content">Capacity: {{ event.capacity }}</p>
-    <p class="article-content">Place: {{ event.place }}</p>
-    {% for u in announcements %}
-    {% if u.EventId == event.id %}
-    <div class="article-metadata" style="color: green !important;">
-      <div style="color: black !important; font-weight: bold;">Announcement:</div> {{ u.announcement }}
-      <span style="color: black !important; font-size: small;">{{ u.create_date }}</span>
-    </div>
-    {% endif %}
-    {% endfor %}
+ Our website gives solution to all the events that occurred in our city 
+ for more information press on Event List 
   </div>
 </article>
-{% endfor %} {% endblock content %}
+{% endblock content %}
