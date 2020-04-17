@@ -13,11 +13,7 @@ UpdatesEvent = EventUpdates.objects.all()
 
 
 def home(request):
-    context = {
-        'events': Event.exclude(id__in=CancelledEvent),
-        'announcements': UpdatesEvent
-    }
-    return render(request, 'event/home.html', context)
+    return render(request, 'event/home.html')
 
 
 def about(request):
@@ -25,4 +21,9 @@ def about(request):
 
 
 def event_list(request):
-    return render(request, 'event/event_list.html', {'title': 'Event_List'})
+    context = {
+        'events': Event.exclude(id__in=CancelledEvent),
+        'announcements': UpdatesEvent
+
+    }
+    return render(request, 'event/event_list.html', context)
