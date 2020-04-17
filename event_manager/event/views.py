@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.db import connection
 from .models import Event
 from .models import CancelledEvent
 from .models import EventUpdates
@@ -8,12 +9,13 @@ from .models import EventUpdates
 
 Event = Event.objects.all()
 CancelledEvent = CancelledEvent.objects.all()
+UpdatesEvent = EventUpdates.objects.all()
 
 
 def home(request):
     context = {
-        'events': Event.exclude(id__in=CancelledEvent).prefetch_related('eventupdates_set'),
-
+        'events': Event.exclude(id__in=CancelledEvent),
+        'announcements': UpdatesEvent
     }
     return render(request, 'event/home.html', context)
 

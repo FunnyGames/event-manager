@@ -19,11 +19,13 @@
     </p>
     <p class="article-content">Capacity: {{ event.capacity }}</p>
     <p class="article-content">Place: {{ event.place }}</p>
-    <h3 class="article-title">Announcmenets</h3>
-    {% for eventupdates_set in event.eventupdates_set.all %}
+    {% for u in announcements %}
+    {% if u.EventId == event.id %}
     <div class="article-metadata" style="color: green !important;">
-      {{eventupdates_set.announcement}}
+      <div style="color: black !important; font-weight: bold;">Announcement:</div> {{ u.announcement }}
+      <span style="color: black !important; font-size: small;">{{ u.create_date }}</span>
     </div>
+    {% endif %}
     {% endfor %}
   </div>
 </article>
