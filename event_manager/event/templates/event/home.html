@@ -2,9 +2,12 @@
 <h1>Welcome to our website</h1>
 
 <article class="media content-section">
-  <div class="media-body">
- Our website gives solution to all the events that occurred in our city 
- for more information press on Event List 
+
+  <div class="article-metadata" style="color: black !important;">
+    <div style="color: black !important; font-weight: bold;">
+      Our website gives solution to all the events that occurred in our city 
+      </div> {{ u.announcement }}
+    <span style="color: pink !important; font-size: medium;"> for more information press on Event List</span>
   </div>
 </article>
 {% endblock content %}
