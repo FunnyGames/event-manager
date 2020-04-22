@@ -3,6 +3,8 @@
 <h1>Event List:</h1>
 
 {% for event in events %}
+{% for cancelled in cancelled_events %}
+{% if event.id != cancelled.EventId %}
 <article class="media content-section">
   <div class="media-body">
     {% if event.cancelled %}
@@ -31,6 +33,7 @@
     {% endfor %}
   </div>
 </article>
-{% endfor %} 
+{% endif %}
+{% endfor %}
+{% endfor %}
 {% endblock content %}
-

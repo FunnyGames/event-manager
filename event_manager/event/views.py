@@ -22,8 +22,8 @@ def about(request):
 
 def event_list(request):
     context = {
-        'events': Event.exclude(id__in=CancelledEvent),
-        'announcements': UpdatesEvent
-
+        'events': Event,
+        'announcements': UpdatesEvent,
+        'cancelled_events': CancelledEvent
     }
     return render(request, 'event/event_list.html', context)
