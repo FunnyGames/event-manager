@@ -35,3 +35,7 @@ To run migrations run the following commands in order:
 `python manage.py makemigrations`
 
 `python manage.py migrate`
+
+## Start new app
+To start a new app use:
+`python manage.py startapp <app_name>`
