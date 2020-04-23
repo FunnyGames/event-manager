@@ -39,3 +39,5 @@ To run migrations run the following commands in order:
 ## Start new app
 To start a new app use:
 `python manage.py startapp <app_name>`
+
+After that add to event_manager setting.py to INSTALLED_APPS.
