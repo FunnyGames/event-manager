@@ -17,6 +17,7 @@
 <p class="article-content"><b>Capacity:</b> {{ registered_users }} / {{ event.capacity }}</p>
 <p class="article-content"><b>Place:</b> {{ event.place }}</p>
 <div style="color: black !important; font-weight: bold;">Announcements:</div>
+{% if announcements|length > 0 %}
 {% for u in announcements %}
 {% if u.EventId == event.id %}
 <div class="article-metadata" style="color: green !important;"> {{ u.announcement }}
@@ -24,5 +25,10 @@
 </div>
 {% endif %}
 {% endfor %}
+{% else %}
+<div class="article-metadata">
+    No announcements
+</div>
+{% endif %}
 {% endif %}
 {% endblock content %}
