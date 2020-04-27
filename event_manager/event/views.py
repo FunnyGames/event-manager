@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.db import connection
 from .models import Event
@@ -29,7 +29,7 @@ def event_list(request):
 
 def view_event(request, id):
     context = {
-        'event': Event.objects.get(id=id),
+        'event': get_object_or_404(Event, id=id),
         'announcements': EventUpdates.objects.filter(EventId=id),
         'cancelled_event': CancelledEvent.objects.filter(EventId=id),
         'registered_users': 1 # placeholder for future use
