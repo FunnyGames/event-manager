@@ -31,6 +31,7 @@ def view_event(request, id):
     context = {
         'event': Event.objects.get(id=id),
         'announcements': EventUpdates.objects.filter(EventId=id),
-        'cancelled_event': CancelledEvent.objects.filter(EventId=id)
+        'cancelled_event': CancelledEvent.objects.filter(EventId=id),
+        'registered_users': 1 # placeholder for future use
     }
     return render(request, 'event/event.html', context)
