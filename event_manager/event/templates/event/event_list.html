@@ -16,7 +16,7 @@
       <small class="text-muted">{{ event.start_date }}</small>
     </div>
     <p class="article-content">Event ID: {{ event.id }}</p>
-    <h2><a class="article-title" href="#">{{ event.title }}</a></h2>
+    <h2><a class="article-title" href="{% url 'event-view' event.id %}">{{ event.title }}</a></h2>
     <p class="article-content">{{ event.description }}</p>
     <p class="article-content">
       Date range: {{ event.start_date }} - {{ event.end_date }}

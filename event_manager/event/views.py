@@ -7,23 +7,30 @@ from .models import EventUpdates
 
 # Create your views here.
 
-Event = Event.objects.all()
-CancelledEvent = CancelledEvent.objects.all()
-UpdatesEvent = EventUpdates.objects.all()
-
-
 def home(request):
     return render(request, 'event/home.html')
 
 
 def about(request):
-    return render(request, 'event/about.html', {'title': 'About'})
+    context = {
+        'title': 'About'
+    }
+    return render(request, 'event/about.html', context)
 
 
 def event_list(request):
     context = {
-        'events': Event,
-        'announcements': UpdatesEvent,
-        'cancelled_events': CancelledEvent
+        'events': Event.objects.all(),
+        'announcements': EventUpdates.objects.all(),
+        'cancelled_events': CancelledEvent.objects.all()
     }
     return render(request, 'event/event_list.html', context)
+
+
+def view_event(request, id):
+    context = {
+        'event': Event.objects.get(id=id),
+        'announcements': EventUpdates.objects.filter(EventId=id),
+        'cancelled_event': CancelledEvent.objects.filter(EventId=id)
+    }
+    return render(request, 'event/event.html', context)

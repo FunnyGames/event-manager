@@ -1,0 +1,29 @@
+{% extends "event/base.html" %}
+{% block content %}
+{% if cancelled_event %}
+<div class="article-metadata" style="color: red !important;">
+    <div style="color: red !important; font-weight: bold;">This event is cancelled.</div>
+</div>
+{% else %}
+<h1>{{event.title}}</h1>
+<div class="article-metadata">
+    <small class="text-muted">{{ event.start_date }}</small>
+</div>
+<p class="article-content">Event ID: {{ event.id }}</p>
+<h2><a class="article-title" href="{% url 'event-view' event.id %}">{{ event.title }}</a></h2>
+<p class="article-content">{{ event.description }}</p>
+<p class="article-content">
+    Date range: {{ event.start_date }} - {{ event.end_date }}
+</p>
+<p class="article-content">Capacity: {{ event.capacity }}</p>
+<p class="article-content">Place: {{ event.place }}</p>
+{% for u in announcements %}
+{% if u.EventId == event.id %}
+<div class="article-metadata" style="color: green !important;">
+    <div style="color: black !important; font-weight: bold;">Announcement:</div> {{ u.announcement }}
+    <span style="color: black !important; font-size: small;">{{ u.create_date }}</span>
+</div>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endblock content %}
