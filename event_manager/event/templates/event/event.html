@@ -1,4 +1,4 @@
-{% extends "event/base.html" %}
+{% extends "event/base.html" %}{% load crispy_forms_tags %} 
 {% block content %}
 {% if cancelled_event %}
 <div class="article-metadata" style="color: red !important;">
@@ -16,10 +16,23 @@
 </p>
 <p class="article-content"><b>Capacity:</b> {{ registered_users }} / {{ event.capacity }}</p>
 <p class="article-content"><b>Place:</b> {{ event.place }}</p>
-
 <p class="article-content"><b>Rating:</b> {{ ratings_avg.rate__avg }}/5 (by {{ ratings_counts }} users)</p>
-
-
+{% if user.id %}
+    {% if my_rating %}
+     <p class="article-content"><b>Rating by me:</b> {{ my_rating.rate }}</p>
+     {% else %}
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+              {{ form }}
+            </fieldset>
+            <div class="form-group">
+              <button class="btn btn-outline-info" type="=submit">Save</button>
+            </div>
+          </form>
+     </p>
+     {% endif %}
+{% endif %}
 <div style="color: black !important; font-weight: bold;">Announcements:</div>
 {% if announcements|length > 0 %}
 {% for u in announcements %}
