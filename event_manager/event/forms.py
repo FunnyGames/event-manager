@@ -11,7 +11,7 @@ RATE_CHOICES=[
     ]
 class RateEventForm(forms.ModelForm):
 
-    rate= forms.CharField(label='RATING:', widget=forms.RadioSelect(choices=RATE_CHOICES))
+    rate= forms.CharField(label='Rate Event:', widget=forms.RadioSelect(choices=RATE_CHOICES))
     
     class Meta:
         model = RateEvent
