@@ -4,7 +4,8 @@ from django.db import connection
 from .models import Event
 from .models import CancelledEvent
 from .models import EventUpdates
-
+from .models import RateEvent
+from django.db.models import Avg
 # Create your views here.
 
 def home(request):
@@ -32,6 +33,10 @@ def view_event(request, id):
         'event': get_object_or_404(Event, id=id),
         'announcements': EventUpdates.objects.filter(EventId=id),
         'cancelled_event': CancelledEvent.objects.filter(EventId=id),
-        'registered_users': 1 # placeholder for future use
-    }
+        'registered_users': 1, # placeholder for future use
+        'ratings_counts' : RateEvent.objects.filter(EventId=id).count(),
+        'ratings_avg' : RateEvent.objects.filter(EventId=id).aggregate(Avg('rate')),
+    } 
     return render(request, 'event/event.html', context)
+
+
