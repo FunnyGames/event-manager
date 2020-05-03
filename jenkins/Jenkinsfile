@@ -29,7 +29,7 @@ pipeline {
             }
             post {
                 always {
-                    junit 'cd event_manager && reports/junit.xml'
+                    junit 'event_manager/reports/junit.xml'
                 }
             }
         }
