@@ -58,8 +58,12 @@ def notifyBuild(String buildStatus = 'STARTED') {
 
   // Send email
   emailext (
-      subject: subject,
-      body: details,
-      recipientProviders: [[$class: 'DevelopersRecipientProvider']]
+        subject: subject,
+        body: details,
+        recipientProviders: [
+            [$class: 'CulpritsRecipientProvider'],
+            [$class: 'DevelopersRecipientProvider'],
+            [$class: 'RequesterRecipientProvider']
+        ]
     )
 }
