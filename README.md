@@ -50,4 +50,4 @@ To run tests, use:
 To start a new app use:
 `python manage.py startapp <app_name>`
 
-After that add the app to event_manager setting.py to INSTALLED_APPS and PROJECT_APPS.
+And then add the app to INSTALLED_APPS and PROJECT_APPS in event_manager/setting.py.
