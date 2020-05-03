@@ -21,7 +21,7 @@ pipeline {
                     sh 'pip install pymysql'
                     sh 'pip install django-crispy-forms'
                     sh 'pip install django_jenkins'
-                    sh 'pip install \'coverage==4.0\''
+                    sh 'pip install \'coverage==4.5.4\''
                     sh 'pip install pep8'
                     sh 'pip install pyflakes'
                     sh 'cd event_manager && python manage.py jenkins --enable-coverage'
