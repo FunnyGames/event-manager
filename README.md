@@ -35,3 +35,13 @@ To run migrations run the following commands in order:
 `python manage.py makemigrations`
 
 `python manage.py migrate`
+
+## Test
+Run the following commands to install requirements for tests:
+`pip install django_jenkins`
+`pip install 'coverage==4.5.4'`
+`pip install pep8`
+`pip install pyflakes`
+
+To run tests, use:
+`python manage.py jenkins --enable-coverage`

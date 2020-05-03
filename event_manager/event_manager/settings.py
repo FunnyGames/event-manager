@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_jenkins',
 ]
 
 MIDDLEWARE = [
@@ -90,7 +91,7 @@ DATABASES = {
     }
 }
 
-if 'test' in sys.argv:
+if 'jenkins' in sys.argv:
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
     DATABASES['default']['NAME'] = 'databasename.db3'
 
@@ -142,3 +143,14 @@ LOGIN_URL = 'login'
 # MEDIA
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+# Tests
+PROJECT_APPS = (
+    'event',
+    'users'
+)
+
+JENKINS_TASKS = (
+    'django_jenkins.tasks.run_pep8',
+    'django_jenkins.tasks.run_pyflakes'
+)

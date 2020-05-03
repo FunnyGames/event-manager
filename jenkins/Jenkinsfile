@@ -1,33 +1,35 @@
 pipeline {
-    agent none
+    agent {
+        docker {
+            image 'python:3-alpine'
+        }
+    }
     stages {
         stage('Build') {
-            agent {
-                docker {
-                    image 'python:3-alpine'
-                }
-            }
             steps {
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     sh 'pip install django'
                     sh 'pip install pymysql'
                     sh 'pip install django-crispy-forms'
-                    // sh 'python event_manager/manage.py runserver'
                 }
             }
         }
         stage('Test') {
-            agent {
-                docker {
-                    image 'python:3-alpine'
-                }
-            }
             steps {
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     sh 'pip install django'
                     sh 'pip install pymysql'
                     sh 'pip install django-crispy-forms'
-                    sh 'cd event_manager && python manage.py test'
+                    sh 'pip install django_jenkins'
+                    sh 'pip install \'coverage==4.0\''
+                    sh 'pip install pep8'
+                    sh 'pip install pyflakes'
+                    sh 'cd event_manager && python manage.py jenkins --enable-coverage'
+                }
+            }
+            post {
+                always {
+                    junit 'reports/junit.xml'
                 }
             }
         }
