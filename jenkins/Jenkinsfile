@@ -61,6 +61,5 @@ def notifyBuild(String buildStatus = 'STARTED') {
         subject: subject,
         body: details,
         to: 'dmytrza@ac.sce.ac.il, michaba6@ac.sce.ac.il, saardi@ac.sce.ac.il, rotemdr@ac.sce.ac.il',
-        from: 'JENKINS no-email@jenkins.com'
     )
 }
