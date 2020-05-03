@@ -17,8 +17,8 @@ pipeline {
             }
         }
         stage('Test') {
-            try {
-                steps {
+            steps {
+                try {
                     withEnv(["HOME=${env.WORKSPACE}"]) {
                         sh 'pip install django'
                         sh 'pip install pymysql'
@@ -29,19 +29,19 @@ pipeline {
                         sh 'pip install pyflakes'
                         sh 'cd event_manager && python manage.py jenkins --enable-coverage'
                     }
+                } catch (e) {
+                    // If there was an exception thrown, the build failed
+                    currentBuild.result = "FAILED"
+                    throw e
                 }
-                post {
-                    always {
-                        junit 'event_manager/reports/junit.xml'
-                    }
+            }
+            post {
+                always {
+                    junit 'event_manager/reports/junit.xml'
+
+                    // Success or failure, always send notifications
+                    notifyBuild(currentBuild.result)
                 }
-            } catch (e) {
-                // If there was an exception thrown, the build failed
-                currentBuild.result = "FAILED"
-                throw e
-            } finally {
-                // Success or failure, always send notifications
-                notifyBuild(currentBuild.result)
             }
         }
     }
