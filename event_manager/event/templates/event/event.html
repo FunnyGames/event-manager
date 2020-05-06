@@ -1,4 +1,4 @@
-{% extends "event/base.html" %}{% load crispy_forms_tags %} 
+{% extends "event/base.html" %}{% load crispy_forms_tags %}
 {% block content %}
 {% if cancelled_event %}
 <div class="article-metadata" style="color: red !important;">
@@ -6,6 +6,24 @@
 </div>
 {% else %}
 <h1>{{event.title}}</h1>
+{% if user.id %}
+{% if my_event|length > 0 %}
+<div style="float: right">
+    <a class="btn btn-outline-info" href="{% url 'event-remove_my_event' event.id %}">
+        <b>Remove from my events</b>
+    </a>
+</div>
+{% else %}
+<form action="{% url 'event-my_events' %}" method="POST" style="float: right;">
+    {% csrf_token %}
+    <div class="form-group">
+        <input type="hidden" name="EventId" value="{{ event.id }}" />
+        <button class="btn btn-outline-info" type="=submit"><b>Add to my events</b></button>
+    </div>
+</form>
+</p>
+{% endif %}
+{% endif %}
 <p class="" style="font-size: small;">Event ID: {{ event.id }}</p>
 <p class="" style="font-size: larger;">
     <b>Description:</b><br />
@@ -18,20 +36,20 @@
 <p class="article-content"><b>Place:</b> {{ event.place }}</p>
 <p class="article-content"><b>Rating:</b> {{ ratings_avg.rate__avg }}/5 (by {{ ratings_counts }} users)</p>
 {% if user.id %}
-    {% if my_rating %}
-     <p class="article-content"><b>My rating:</b> {{ my_rating.rate }}</p>
-     {% else %}
-        <form method="POST">
-            {% csrf_token %}
-            <fieldset class="form-group">
-              {{ form }}
-            </fieldset>
-            <div class="form-group">
-              <button class="btn btn-outline-info" type="=submit"><b>Save</b></button>
-            </div>
-          </form>
-     </p>
-     {% endif %}
+{% if my_rating %}
+<p class="article-content"><b>My rating:</b> {{ my_rating.rate }}</p>
+{% else %}
+<form method="POST">
+    {% csrf_token %}
+    <fieldset class="form-group">
+        {{ form }}
+    </fieldset>
+    <div class="form-group">
+        <button class="btn btn-outline-info" type="=submit"><b>Save</b></button>
+    </div>
+</form>
+</p>
+{% endif %}
 {% endif %}
 <div style="color: black !important; font-weight: bold;">Announcements:</div>
 {% if announcements|length > 0 %}

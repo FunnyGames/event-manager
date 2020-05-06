@@ -35,7 +35,7 @@ class EventUpdates(models.Model):
     create_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.EventId)
+        return str(self.EventId) + ' - ' + str(self.announcement)
 
 
 class RateEvent(models.Model):
@@ -52,7 +52,7 @@ class RateEvent(models.Model):
         ]
 
     def __str__(self):
-        return str(self.EventId)
+        return str(self.EventId) + ' - ' + str(self.user) + ' - ' + str(self.rate)
 
 
 class MyEvent(models.Model):
@@ -66,4 +66,4 @@ class MyEvent(models.Model):
         ]
 
     def __str__(self):
-        return str(self.EventId)
+        return str(self.EventId) + ' - ' + str(self.user)
