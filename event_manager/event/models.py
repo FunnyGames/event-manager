@@ -39,9 +39,9 @@ class EventUpdates(models.Model):
 
 
 class RateEvent(models.Model):
-  
     EventId = models.IntegerField(default=0)
-    rate = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    rate = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)])
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     create_date = models.DateTimeField(auto_now=True)
 
@@ -50,6 +50,20 @@ class RateEvent(models.Model):
             CheckConstraint(check=Q(rate__range=(1, 5)), name='valid_rate'),
             UniqueConstraint(fields=['user', 'EventId'], name='rating_once')
         ]
-    
+
+    def __str__(self):
+        return str(self.EventId)
+
+
+class MyEvent(models.Model):
+    EventId = models.IntegerField(default=0)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    create_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['user', 'EventId'], name='events_once')
+        ]
+
     def __str__(self):
         return str(self.EventId)
