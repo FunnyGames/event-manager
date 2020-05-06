@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..models import Event, CancelledEvent, EventUpdates ,RateEvent
+from ..models import Event, CancelledEvent, EventUpdates ,RateEvent,MyEvent
 from django.contrib.auth.models import User
 
 import this
@@ -97,3 +97,25 @@ class EventRateModelTest(TestCase):
         event = RateEvent.objects.get(id=1)
         auto = event._meta.get_field('create_date').auto_now
         self.assertEquals(auto, True)       
+
+class MyEventModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        # Run once to set up non-modified data for all class methods.
+       
+        MyEvent.objects.create(
+            EventId=2,
+            user= User.objects.create(
+            username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
+        )
+
+    def test_EventId_default(self):
+        event = MyEvent.objects.get(id=1)
+        default = event._meta.get_field('EventId').default
+        self.assertEquals(default, 0)
+
+    def test_create_date_auto_now(self):
+        event = MyEvent.objects.get(id=1)
+        auto = event._meta.get_field('create_date').auto_now
+        self.assertEquals(auto, True)   
