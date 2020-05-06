@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import connection
 from .models import Event
@@ -8,6 +9,7 @@ from .models import RateEvent
 from .models import MyEvent
 from django.db.models import Avg
 from .forms import RateEventForm
+from datetime import date
 
 # Create your views here.
 
@@ -36,8 +38,10 @@ def view_event(request, id):
 
     form = None
     my_rating = None
+    my_event = []
 
     if request.user.id:
+        my_event = MyEvent.objects.filter(EventId=id, user=request.user)
         my_rating = (RateEvent.objects.filter(
             user=request.user).filter(EventId=id).first())
         if my_rating == None:
@@ -59,27 +63,28 @@ def view_event(request, id):
         'event': get_object_or_404(Event, id=id),
         'announcements': EventUpdates.objects.filter(EventId=id),
         'cancelled_event': CancelledEvent.objects.filter(EventId=id),
-        'registered_users': 1,  # placeholder for future use
+        'registered_users': MyEvent.objects.filter(EventId=id).count(),
         'ratings_counts': RateEvent.objects.filter(EventId=id).count(),
         'ratings_avg': RateEvent.objects.filter(EventId=id).aggregate(Avg('rate')),
         'my_rating': my_rating,
-        'my_event': MyEvent.objects.filter(EventId=id),
+        'my_event': my_event,
         'form': form
     }
 
     return render(request, 'event/event.html', context)
 
 
+@login_required
 def my_events(request):
     if request.method == 'POST':
         eventId = request.POST.get('EventId', None)
         if (eventId != None):
-            x = MyEvent.objects.create(EventId=eventId, user=request.user)
+            MyEvent.objects.create(EventId=eventId, user=request.user)
             messages.success(
                 request, f'Event was added to your events successfully')
 
     context = {
-        'events': Event.objects.all(),
+        'events': Event.objects.filter(create_date__gte=date.today()),
         'announcements': EventUpdates.objects.all(),
         'cancelled_events': CancelledEvent.objects.all(),
         'my_events': MyEvent.objects.filter(user_id=request.user.id)
@@ -87,6 +92,18 @@ def my_events(request):
     return render(request, 'event/my_events.html', context)
 
 
+@login_required
+def my_events_past(request):
+    context = {
+        'events': Event.objects.filter(create_date__lte=date.today()),
+        'announcements': EventUpdates.objects.all(),
+        'cancelled_events': CancelledEvent.objects.all(),
+        'my_events': MyEvent.objects.filter(user_id=request.user.id)
+    }
+    return render(request, 'event/my_events.html', context)
+
+
+@login_required
 def remove_my_event(request, id):
     if request.method == 'POST':
         myId = request.POST.get('id', None)

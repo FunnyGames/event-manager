@@ -19,10 +19,10 @@
     <h2><a class="article-title" href="{% url 'event-view' event.id %}">{{ event.title }}</a></h2>
     <p class="article-content">{{ event.description }}</p>
     <p class="article-content">
-      Date range: {{ event.start_date }} - {{ event.end_date }}
+      <b>Date range:</b> {{ event.start_date }} - {{ event.end_date }}
     </p>
-    <p class="article-content">Capacity: {{ event.capacity }}</p>
-    <p class="article-content">Place: {{ event.place }}</p>
+    <p class="article-content"><b>Capacity:</b> {{ event.capacity }}</p>
+    <p class="article-content"><b>Place:</b> {{ event.place }}</p>
     {% for u in announcements %}
     {% if u.EventId == event.id %}
     <div class="article-metadata" style="color: green !important;">
