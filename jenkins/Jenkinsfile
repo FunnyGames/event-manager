@@ -32,8 +32,6 @@ pipeline {
             post {
                 always {
                     junit 'event_manager/reports/junit.xml'
-
-                    // Success or failure, always send notifications
                 }
                 success {
                     notifyBuild('SUCCESS')
@@ -52,7 +50,6 @@ def notifyBuild(String buildStatus = 'STARTED') {
 
   // Default values
   def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
-  def summary = "${subject} (${env.BUILD_URL})"
   def details = """<p>STARTED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
     <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>"""
 
