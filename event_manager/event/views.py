@@ -42,7 +42,13 @@ def view_event(request, id):
     my_rating = None
     my_event = []
 
-
+    if request.method == 'POST' and 'comment_post' in request.POST:
+        commentForm = eventCommentForm(request.POST)
+        if commentForm.is_valid():
+            comment = commentForm.save(commit=False)
+            comment.user_id = request.user.id
+            comment.EventId = id
+            comment.save()
 
     if request.user.id:
         my_event = MyEvent.objects.filter(EventId=id, user=request.user)

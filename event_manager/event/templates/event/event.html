@@ -83,6 +83,14 @@
         No Comments
     </div>
 {% endif %}
-
+<form method="POST">
+    {% csrf_token %}
+    <fieldset class="form-group">
+        {{ commentForm|crispy }}
+    </fieldset>
+    <div class="form-group">
+        <button class="btn btn-outline-info" name="comment_post" type="=submit"><b>Add Comment</b></button>
+    </div>
+</form>
 
 {% endblock content %}
