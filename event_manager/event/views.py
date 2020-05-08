@@ -132,3 +132,7 @@ def remove_my_event(request, id):
         'my_events': MyEvent.objects.filter(user_id=request.user.id, EventId=id)
     }
     return render(request, 'event/confirm_remove_my_event.html', context)
+
+
+
+
