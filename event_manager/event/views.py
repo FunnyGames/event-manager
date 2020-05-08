@@ -7,8 +7,9 @@ from .models import CancelledEvent
 from .models import EventUpdates
 from .models import RateEvent
 from .models import MyEvent
+from .models import EventComment
 from django.db.models import Avg
-from .forms import RateEventForm
+from .forms import RateEventForm, eventCommentForm
 from datetime import date
 
 # Create your views here.
@@ -36,20 +37,23 @@ def event_list(request):
 
 def view_event(request, id):
 
-    form = None
+    ratingForm = None
+    commentForm = eventCommentForm()
     my_rating = None
     my_event = []
+
+
 
     if request.user.id:
         my_event = MyEvent.objects.filter(EventId=id, user=request.user)
         my_rating = (RateEvent.objects.filter(
             user=request.user).filter(EventId=id).first())
         if my_rating == None:
-            if request.method == 'POST':
-                form = RateEventForm(request.POST)
+            if request.method == 'POST' and 'rating_post' in request.POST:
+                ratingForm = RateEventForm(request.POST)
 
-                if form.is_valid():
-                    rating = form.save(commit=False)
+                if ratingForm.is_valid():
+                    rating = ratingForm.save(commit=False)
                     if rating.user_id is None:
                         rating.user_id = request.user.id
                         rating.EventId = id
@@ -57,7 +61,8 @@ def view_event(request, id):
                     my_rating = (RateEvent.objects.filter(
                         user=request.user).filter(EventId=id).first())
             else:
-                form = RateEventForm()
+                ratingForm = RateEventForm()
+
 
     context = {
         'event': get_object_or_404(Event, id=id),
@@ -67,8 +72,10 @@ def view_event(request, id):
         'ratings_counts': RateEvent.objects.filter(EventId=id).count(),
         'ratings_avg': RateEvent.objects.filter(EventId=id).aggregate(Avg('rate')),
         'my_rating': my_rating,
+        'comments': EventComment.objects.all().filter(EventId=id),
         'my_event': my_event,
-        'form': form
+        'ratingForm': ratingForm, 
+        'commentForm': commentForm
     }
 
     return render(request, 'event/event.html', context)

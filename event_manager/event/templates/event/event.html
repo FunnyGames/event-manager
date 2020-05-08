@@ -1,9 +1,10 @@
 {% extends "event/base.html" %}{% load crispy_forms_tags %}
 {% block content %}
+
 {% if cancelled_event %}
-<div class="article-metadata" style="color: red !important;">
-    <div style="color: red !important; font-weight: bold;">This event is cancelled.</div>
-</div>
+    <div class="article-metadata" style="color: red !important;">
+        <div style="color: red !important; font-weight: bold;">This event is cancelled.</div>
+    </div>
 {% else %}
 <h1>{{event.title}}</h1>
 {% if user.id %}
@@ -42,28 +43,46 @@
 <form method="POST">
     {% csrf_token %}
     <fieldset class="form-group">
-        {{ form }}
+        {{ ratingForm }}
     </fieldset>
     <div class="form-group">
-        <button class="btn btn-outline-info" type="=submit"><b>Save</b></button>
+        <button class="btn btn-outline-info"  name="rating_post" type="=submit"><b>Save</b></button>
     </div>
 </form>
 </p>
 {% endif %}
 {% endif %}
+
 <div style="color: black !important; font-weight: bold;">Announcements:</div>
 {% if announcements|length > 0 %}
-{% for u in announcements %}
-{% if u.EventId == event.id %}
-<div class="article-metadata" style="color: green !important;"> {{ u.announcement }}
-    <span style="color: black !important; font-size: small;">{{ u.create_date }}</span>
-</div>
-{% endif %}
-{% endfor %}
+    {% for u in announcements %}
+        {% if u.EventId == event.id %}
+        <div class="article-metadata" style="color: green !important;"> {{ u.announcement }}
+            <span style="color: black !important; font-size: small;">{{ u.create_date }}</span>
+        </div>
+        {% endif %}
+    {% endfor %}
 {% else %}
 <div class="article-metadata">
     No announcements
 </div>
 {% endif %}
 {% endif %}
+
+<br/>
+<div style="color: black !important; font-weight: bold;">Comments: </div>
+{% if comments|length > 0 %}
+    {% for c in comments %}
+        <div class="article-metadata"> {{ c.text }}
+            <span style="color: black !important; font-weight: bold; font-size: small;"> by {{ c.user }} </span>
+            <span style="color: black !important; font-size: small;">{{ c.create_date }}</span>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="article-metadata">
+        No Comments
+    </div>
+{% endif %}
+
+
 {% endblock content %}
