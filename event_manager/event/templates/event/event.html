@@ -73,14 +73,17 @@
 <div style="color: black !important; font-weight: bold;">Comments: </div>
 {% if comments|length > 0 %}
     {% for c in comments %}
-        <div class="article-metadata"> {{ c.text }}
-            <span style="color: black !important; font-weight: bold; font-size: small;"> by {{ c.user }} </span>
-            <span style="color: black !important; font-size: small;">{{ c.create_date }}</span>
-            {% if user.is_staff or user == c.user  %}
-                <a class="btn btn-outline-info" href="{% url 'delete_comment' c.id %}">
-                    <b>Delete</b>
-                </a>
-            {% endif %}
+        <div class="article-metadata"> 
+            <div class="d-flex" style="align-items: center">
+                {{ c.text }}
+                <span class="p-2" style="color: black !important; font-weight: bold; font-size: small;"> by {{ c.user }} </span>
+                <span class="p-2" style="color: black !important; font-size: small;">{{ c.create_date }}</span>
+                {% if user.is_staff or user == c.user  %}
+                    <a class="p-2 ml-auto" href="{% url 'delete_comment' c.id %}" >
+                        Delete
+                    </a>
+                {% endif %}
+            </div>
         </div>
     {% endfor %}
 {% else %}
