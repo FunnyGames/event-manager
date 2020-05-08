@@ -15,7 +15,7 @@ class EventCommentFormTest(TestCase):
         def test_required_missing(self):
             data = {}
             form = eventCommentForm(data)
-            self.assertFalse(form.is_valid())
+            self.assertFalse(form.is_valid()) 
 
 
 class RateEventFormTest(TestCase):
