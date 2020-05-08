@@ -133,6 +133,14 @@ def remove_my_event(request, id):
     }
     return render(request, 'event/confirm_remove_my_event.html', context)
 
+@login_required
+def delete_comment(request, id):
+    comment = EventComment.objects.get(id=id)
+    EventId = comment.EventId
+    if (id != None):
+        EventComment.objects.filter(
+            id=id).delete()
 
+    return redirect('event-view', id=EventId)
 
 
