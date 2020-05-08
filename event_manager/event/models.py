@@ -55,6 +55,16 @@ class RateEvent(models.Model):
         return str(self.EventId) + ' - ' + str(self.user) + ' - ' + str(self.rate)
 
 
+class EventComment(models.Model):
+    EventId = models.IntegerField(default=0)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    create_date = models.DateTimeField(auto_now=True)
+    text =  models.TextField()
+
+    def __str__(self):
+        return str(self.create_date) + ' by ' + str(self.user) 
+
+
 class MyEvent(models.Model):
     EventId = models.IntegerField(default=0)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
