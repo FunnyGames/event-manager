@@ -21,7 +21,10 @@ class RateEventForm(forms.ModelForm):
         fields = ['rate']
 
 class eventCommentForm(forms.ModelForm):
-    text = forms.CharField(max_length=200, widget=forms.TextInput({}))
+    text = forms.CharField(
+        max_length=200,
+        label="Write Comment:",
+        widget=forms.Textarea(attrs={'style':'max-width: 25em'}))
 
     class Meta:
         model = EventComment
