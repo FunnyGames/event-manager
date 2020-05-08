@@ -76,7 +76,7 @@
         <div class="article-metadata"> {{ c.text }}
             <span style="color: black !important; font-weight: bold; font-size: small;"> by {{ c.user }} </span>
             <span style="color: black !important; font-size: small;">{{ c.create_date }}</span>
-            {% if user.is_staff  %}
+            {% if user.is_staff or user == c.user  %}
                 <a class="btn btn-outline-info" href="{% url 'delete_comment' c.id %}">
                     <b>Delete</b>
                 </a>

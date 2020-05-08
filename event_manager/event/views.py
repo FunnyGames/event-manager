@@ -49,6 +49,7 @@ def view_event(request, id):
             comment.user_id = request.user.id
             comment.EventId = id
             comment.save()
+            return redirect('event-view', id=id)
 
     if request.user.id:
         my_event = MyEvent.objects.filter(EventId=id, user=request.user)
