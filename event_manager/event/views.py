@@ -8,6 +8,7 @@ from .models import EventUpdates
 from .models import RateEvent
 from .models import MyEvent
 from .models import EventComment
+from .models import ReportComment
 from django.db.models import Avg
 from .forms import RateEventForm, eventCommentForm
 from datetime import date
@@ -70,7 +71,6 @@ def view_event(request, id):
             else:
                 ratingForm = RateEventForm()
 
-
     context = {
         'event': get_object_or_404(Event, id=id),
         'announcements': EventUpdates.objects.filter(EventId=id),
@@ -81,7 +81,7 @@ def view_event(request, id):
         'my_rating': my_rating,
         'comments': EventComment.objects.all().filter(EventId=id),
         'my_event': my_event,
-        'ratingForm': ratingForm, 
+        'ratingForm': ratingForm,
         'commentForm': commentForm
     }
 
@@ -134,6 +134,7 @@ def remove_my_event(request, id):
     }
     return render(request, 'event/confirm_remove_my_event.html', context)
 
+
 @login_required
 def delete_comment(request, id):
     comment = EventComment.objects.get(id=id)
@@ -145,3 +146,17 @@ def delete_comment(request, id):
     return redirect('event-view', id=EventId)
 
 
+@login_required
+def report_comment(request, id):
+    try:
+        comment = EventComment.objects.get(id=id)
+        EventId = comment.EventId
+        if (EventId != None):
+            ReportComment.objects.create(
+                EventId=EventId, CommentId=comment, user=request.user)
+            messages.success(
+                request, f'Comment Reported Successfully')
+    except:
+        messages.error(
+            request, f'Comment Reported ERROR')
+    return redirect('event-view', id=EventId)

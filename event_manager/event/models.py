@@ -62,7 +62,7 @@ class EventComment(models.Model):
     text = models.TextField()
 
     def __str__(self):
-        return str(self.create_date) + ' by ' + str(self.user)
+        return str(self.text) + ' by ' + str(self.user)
 
 
 class MyEvent(models.Model):
@@ -84,6 +84,12 @@ class ReportComment(models.Model):
     CommentId = models.ForeignKey(EventComment, on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     create_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['user', 'EventId', 'CommentId'], name='report_once')
+        ]
 
     def __str__(self):
         return str(self.EventId) + ' - ' + str(self.user)
