@@ -73,7 +73,8 @@
 <div style="color: black !important; font-weight: bold;">Comments: </div>
 {% if comments|length > 0 %}
     {% for c in comments %}
-        <div class="article-metadata"> 
+
+        <div class="article-metadata {{c_class}}"  > 
             <div class="d-flex" style="align-items: center">
                 {{ c.text }}
                 <span class="p-2" style="color: black !important; font-weight: bold; font-size: small;"> by {{ c.user }} </span>

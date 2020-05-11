@@ -82,7 +82,9 @@ def view_event(request, id):
         'comments': EventComment.objects.all().filter(EventId=id),
         'my_event': my_event,
         'ratingForm': ratingForm,
-        'commentForm': commentForm
+        'commentForm': commentForm,
+        'reports': ReportComment.objects.filter(EventId=id)
+
     }
 
     return render(request, 'event/event.html', context)
@@ -159,4 +161,5 @@ def report_comment(request, id):
     except:
         messages.warning(
             request, f'ERROR - Already Reported?')
+
     return redirect('event-view', id=EventId)
