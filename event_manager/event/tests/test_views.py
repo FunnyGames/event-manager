@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
-from ..models import Event, CancelledEvent, EventUpdates,RateEvent,MyEvent
+from ..models import Event, CancelledEvent, EventUpdates, RateEvent, MyEvent, EventComment
 from django.contrib.auth.models import User
+
 
 class ViewEventTest(TestCase):
     def setUp(self):
@@ -24,21 +25,31 @@ class ViewEventTest(TestCase):
             place='tel-aviv'
         )
         test_event_2.save()
+        test_user1 = User.objects.create_user(
+            username='testuser1', password='Aa123123')
+
+        test_user1.save()
+
+        CommentId = EventComment.objects.create(
+            EventId=2, user=test_user1, text="test")
+
+        CommentId.save()
 
         test_cancelled_event = CancelledEvent.objects.create(EventId=1)
         test_cancelled_event.save()
-        
-        test_rate_event = RateEvent.objects.create(EventId=2,user=User.objects.create(
-            username='test1', email='test@email.com', first_name='Big', last_name='Bob'),rate=5)
+
+        test_rate_event = RateEvent.objects.create(EventId=2, user=User.objects.create(
+            username='test1', email='test@email.com', first_name='Big', last_name='Bob'), rate=5)
         test_rate_event.save()
 
-        test_event_update = EventUpdates.objects.create(EventId=2, announcement='ann test')
+        test_event_update = EventUpdates.objects.create(
+            EventId=2, announcement='ann test')
         test_event_update.save()
-        
-        test_my_events = MyEvent.objects.create(EventId=2,user=User.objects.create(
+
+        test_my_events = MyEvent.objects.create(EventId=2, user=User.objects.create(
             username='test2', email='test2@email.com', first_name='Big2', last_name='Bob2'))
         test_my_events.save()
-        
+
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get(reverse('event-view', args=[1]))
         self.assertEqual(response.status_code, 200)
@@ -52,5 +63,9 @@ class ViewEventTest(TestCase):
         response = self.client.get(reverse('event-view', args=[1000]))
         self.assertEqual(response.status_code, 404)
 
-
-
+    def test_redirect_if_report_comment(self):
+        login = self.client.login(
+            username='testuser1', password='Aa123123')
+        response = self.client.get(reverse('report_comment', args=[1]))
+        self.assertRedirects(
+            response, '/event/2/')
