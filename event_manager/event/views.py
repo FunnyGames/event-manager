@@ -157,6 +157,6 @@ def report_comment(request, id):
             messages.success(
                 request, f'Comment Reported Successfully')
     except:
-        messages.error(
-            request, f'Comment Reported ERROR')
+        messages.warning(
+            request, f'ERROR - Already Reported?')
     return redirect('event-view', id=EventId)

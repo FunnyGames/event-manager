@@ -83,9 +83,11 @@
                         Delete
                     </a>
                 {% endif %}
+                {% if user != c.user  %}
                 <a style="color: red" class="p-2 ml-auto" href="{% url 'report_comment' c.id %}" >
                     Report
                 </a>
+                {% endif %}
             </div>
         </div>
     {% endfor %}
