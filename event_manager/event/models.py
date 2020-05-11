@@ -59,10 +59,10 @@ class EventComment(models.Model):
     EventId = models.IntegerField(default=0)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     create_date = models.DateTimeField(auto_now=True)
-    text =  models.TextField()
+    text = models.TextField()
 
     def __str__(self):
-        return str(self.create_date) + ' by ' + str(self.user) 
+        return str(self.create_date) + ' by ' + str(self.user)
 
 
 class MyEvent(models.Model):
@@ -74,6 +74,16 @@ class MyEvent(models.Model):
         constraints = [
             UniqueConstraint(fields=['user', 'EventId'], name='events_once')
         ]
+
+    def __str__(self):
+        return str(self.EventId) + ' - ' + str(self.user)
+
+
+class ReportComment(models.Model):
+    EventId = models.IntegerField(default=0)
+    CommentId = models.ForeignKey(EventComment, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    create_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.EventId) + ' - ' + str(self.user)
