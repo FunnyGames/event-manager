@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..models import Event, CancelledEvent, EventUpdates ,RateEvent,MyEvent, EventComment
+from ..models import Event, CancelledEvent, EventUpdates, RateEvent, MyEvent, EventComment, ReportComment
 from django.contrib.auth.models import User
 
 import this
@@ -18,7 +18,6 @@ class EventModelTest(TestCase):
             capacity=100,
             place='LOL'
         )
-
 
     def test_title_max_length(self):
         event = Event.objects.get(id=1)
@@ -45,13 +44,12 @@ class CancelledEventModelTest(TestCase):
             EventId=2
         )
 
-
     def test_EventId_default(self):
         event = CancelledEvent.objects.get(id=1)
         default = event._meta.get_field('EventId').default
         self.assertEquals(default, 0)
 
-    
+
 class EventUpdatesModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -61,7 +59,6 @@ class EventUpdatesModelTest(TestCase):
             EventId=2,
             announcement='Test me'
         )
-
 
     def test_EventId_default(self):
         event = EventUpdates.objects.get(id=1)
@@ -79,13 +76,13 @@ class EventRateModelTest(TestCase):
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         # Run once to set up non-modified data for all class methods.
-       
+
         RateEvent.objects.create(
             EventId=2,
-            user= User.objects.create(
-            username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
+            user=User.objects.create(
+                username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
             rate=5
-            
+
         )
 
     def test_EventId_default(self):
@@ -96,18 +93,19 @@ class EventRateModelTest(TestCase):
     def test_create_date_auto_now(self):
         event = RateEvent.objects.get(id=1)
         auto = event._meta.get_field('create_date').auto_now
-        self.assertEquals(auto, True)       
+        self.assertEquals(auto, True)
+
 
 class MyEventModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         # Run once to set up non-modified data for all class methods.
-       
+
         MyEvent.objects.create(
             EventId=2,
-            user= User.objects.create(
-            username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
+            user=User.objects.create(
+                username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
         )
 
     def test_EventId_default(self):
@@ -119,19 +117,20 @@ class MyEventModelTest(TestCase):
         event = MyEvent.objects.get(id=1)
         auto = event._meta.get_field('create_date').auto_now
         self.assertEquals(auto, True)
-    
+
+
 class EventCommentTest:
     @classmethod
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         # Run once to set up non-modified data for all class methods.
-       
+
         RateEvent.objects.create(
             EventId=2,
-            user= User.objects.create(
-            username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
+            user=User.objects.create(
+                username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
             text="testing"
-            
+
         )
 
     def test_EventId_default(self):
@@ -142,4 +141,30 @@ class EventCommentTest:
     def test_create_date_auto_now(self):
         event = RateEvent.objects.get(id=1)
         auto = event._meta.get_field('create_date').auto_now
-        self.assertEquals(auto, True)       
+        self.assertEquals(auto, True)
+
+
+class ReportCommentTest:
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        # Run once to set up non-modified data for all class methods.
+        user = User.objects.create(
+            username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
+        ReportComment.objects.create(
+            EventId=2,
+            user=user,
+            CommentId=EventComment.objects.create(
+                EventId=2, user=user, text="test")
+
+        )
+
+    def test_EventId_default(self):
+        report = ReportComment.objects.get(id=1)
+        default = report._meta.get_field('EventId').default
+        self.assertEquals(default, 0)
+
+    def test_create_date_auto_now(self):
+        report = ReportComment.objects.get(id=1)
+        auto = report._meta.get_field('create_date').auto_now
+        self.assertEquals(auto, True)
