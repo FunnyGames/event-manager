@@ -8,9 +8,10 @@ from .models import EventUpdates
 from .models import RateEvent
 from .models import MyEvent
 from .models import EventComment
+from .models import EventRecommend
 from .models import ReportComment
 from django.db.models import Avg
-from .forms import RateEventForm, eventCommentForm
+from .forms import RateEventForm, eventCommentForm,eventRecommendForm
 from datetime import date
 
 # Create your views here.
@@ -40,6 +41,7 @@ def view_event(request, id):
 
     ratingForm = None
     commentForm = eventCommentForm()
+    recommendForm = eventRecommendForm()
     my_rating = None
     my_event = []
 
@@ -50,6 +52,15 @@ def view_event(request, id):
             comment.user_id = request.user.id
             comment.EventId = id
             comment.save()
+            return redirect('event-view', id=id)
+    
+    if request.method == 'POST' and 'recommend_post' in request.POST:
+        recommendForm = eventRecommendForm(request.POST)
+        if recommendForm.is_valid():
+            recommend = recommendForm.save(commit=False)
+            recommend.user_id = request.user.id
+            recommend.EventId = id
+            recommend.save()
             return redirect('event-view', id=id)
 
     if request.user.id:
@@ -80,9 +91,11 @@ def view_event(request, id):
         'ratings_avg': RateEvent.objects.filter(EventId=id).aggregate(Avg('rate')),
         'my_rating': my_rating,
         'comments': EventComment.objects.all().filter(EventId=id),
+        'recommends': EventRecommend.objects.all().filter(EventId=id),
         'my_event': my_event,
         'ratingForm': ratingForm,
         'commentForm': commentForm,
+        'recommendForm':recommendForm,
         'reports': ReportComment.objects.filter(EventId=id)
 
     }

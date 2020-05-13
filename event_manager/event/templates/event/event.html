@@ -70,6 +70,32 @@
 {% endif %}
 
 <br/>
+
+<div>Webmasters Recommendation: </div>
+{% if recommends|length > 0 %}
+    {% for c in recommends %}
+    {% for r in reports %}
+    {% if r.CommentId == c %}
+        <strong >
+        Reported
+        </strong>
+    {% endif %}    
+    {% endfor %}
+        <div class="article-metadata {{c_class}}"  > 
+            <div class="d-flex" style="align-items: center">
+                {{ c.text }}
+                <span>{{ c.create_date }}</span>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="article-metadata">
+        No Recommend
+    </div>
+{% endif %}
+<br/>
+
+
 <div style="color: black !important; font-weight: bold;">Comments: </div>
 {% if comments|length > 0 %}
     {% for c in comments %}
@@ -113,7 +139,9 @@
     <div class="form-group">
         <button class="btn btn-outline-info" name="comment_post" type="=submit"><b>Add Comment</b></button>
     </div>
-</form>
+
+<br/>
+<br/>
 <br/>
 
 {% endblock content %}

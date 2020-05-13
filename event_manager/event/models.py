@@ -65,6 +65,17 @@ class EventComment(models.Model):
         return str(self.text) + ' by ' + str(self.user)
 
 
+class EventRecommend(models.Model):
+    EventId = models.IntegerField(default=0)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    create_date = models.DateTimeField(auto_now=True)
+    text = models.TextField()
+
+    def __str__(self):
+        return str(self.text) + ' by ' + str(self.user)
+
+
+
 class MyEvent(models.Model):
     EventId = models.IntegerField(default=0)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)

@@ -1,5 +1,5 @@
 from django import forms
-from .models import CancelledEvent, EventUpdates, RateEvent, EventComment
+from .models import CancelledEvent, EventUpdates, RateEvent, EventComment,EventRecommend
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 RATE_CHOICES = [
@@ -14,7 +14,7 @@ RATE_CHOICES = [
 class RateEventForm(forms.ModelForm):
 
     rate = forms.CharField(label='Rate Event:',
-                           widget=forms.RadioSelect(choices=RATE_CHOICES))
+        widget=forms.RadioSelect(choices=RATE_CHOICES))
 
     class Meta:
         model = RateEvent
@@ -28,5 +28,14 @@ class eventCommentForm(forms.ModelForm):
 
     class Meta:
         model = EventComment
+        fields = ['text']
+
+class eventRecommendForm(forms.ModelForm):
+    text = forms.CharField(
+        max_length=200,
+        widget=forms.Textarea(attrs={'style':'max-width: 25em'}))
+
+    class Meta:
+        model = EventRecommend
         fields = ['text']
 
