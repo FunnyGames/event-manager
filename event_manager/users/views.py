@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm
 from django.contrib.auth.models import User
-
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -31,7 +31,23 @@ def profile(request):
 
 @login_required
 def users(request):
+    page = request.GET.get('page')
+    limit = request.GET.get('limit')
+    if limit == None:
+        limit = 5
+    else:
+        limit = int(limit)
+        if limit < 1 or limit > 20:
+            limit = 5
+
+    p = Paginator(User.objects.all(), limit)
+    if page == None:
+        page = 1
+    else:
+        page = int(page)
+        if page < 1 or page > p.num_pages:
+            page = 1
     context = {
-        'users': User.objects.all()
+        'page_obj': p.get_page(page)
     }
     return render(request, 'users/users_list.html', context)
