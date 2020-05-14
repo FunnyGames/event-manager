@@ -11,7 +11,7 @@ from .models import EventComment
 from .models import EventRecommend
 from .models import ReportComment
 from django.db.models import Avg
-from .forms import RateEventForm, eventCommentForm,eventRecommendForm
+from .forms import RateEventForm, eventCommentForm, eventRecommendForm
 from datetime import date
 
 # Create your views here.
@@ -37,6 +37,16 @@ def event_list(request):
     return render(request, 'event/event_list.html', context)
 
 
+def recommended_event_list(request):
+    context = {
+        'events': Event.objects.filter(start_date__gte=date.today()),
+        'announcements': EventUpdates.objects.all(),
+        'cancelled_events': CancelledEvent.objects.all(),
+        'recommended_events': EventRecommend.objects.all()
+    }
+    return render(request, 'event/recommended_event_list.html', context)
+
+
 def view_event(request, id):
 
     ratingForm = None
@@ -53,7 +63,7 @@ def view_event(request, id):
             comment.EventId = id
             comment.save()
             return redirect('event-view', id=id)
-    
+
     if request.method == 'POST' and 'recommend_post' in request.POST:
         recommendForm = eventRecommendForm(request.POST)
         if recommendForm.is_valid():
@@ -95,9 +105,8 @@ def view_event(request, id):
         'my_event': my_event,
         'ratingForm': ratingForm,
         'commentForm': commentForm,
-        'recommendForm':recommendForm,
+        'recommendForm': recommendForm,
         'reports': ReportComment.objects.filter(EventId=id)
-
     }
 
     return render(request, 'event/event.html', context)
@@ -113,7 +122,7 @@ def my_events(request):
                 request, f'Event was added to your events successfully')
 
     context = {
-        'events': Event.objects.filter(create_date__gte=date.today()),
+        'events': Event.objects.filter(start_date__gte=date.today()),
         'announcements': EventUpdates.objects.all(),
         'cancelled_events': CancelledEvent.objects.all(),
         'my_events': MyEvent.objects.filter(user_id=request.user.id)
@@ -124,7 +133,18 @@ def my_events(request):
 @login_required
 def my_events_past(request):
     context = {
-        'events': Event.objects.filter(create_date__lte=date.today()),
+        'events': Event.objects.filter(start_date__lte=date.today()),
+        'announcements': EventUpdates.objects.all(),
+        'cancelled_events': CancelledEvent.objects.all(),
+        'my_events': MyEvent.objects.filter(user_id=request.user.id)
+    }
+    return render(request, 'event/my_events.html', context)
+
+
+@login_required
+def my_events_all(request):
+    context = {
+        'events': Event.objects.all(),
         'announcements': EventUpdates.objects.all(),
         'cancelled_events': CancelledEvent.objects.all(),
         'my_events': MyEvent.objects.filter(user_id=request.user.id)

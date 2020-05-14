@@ -2,10 +2,30 @@
 {% block content %}
 
 {% if cancelled_event %}
-    <div class="article-metadata" style="color: red !important;">
-        <div style="color: red !important; font-weight: bold;">This event is cancelled.</div>
-    </div>
+<div class="article-metadata" style="color: red !important;">
+    <div style="color: red !important; font-weight: bold;">This event is cancelled.</div>
+</div>
 {% else %}
+{% if recommends|length > 0 %}
+<div class="article-metadata {{c_class}}">
+    <div class="d-flex" style="align-items: center; background-color: orange; border: 1px; border-radius: 0.5em;">
+        <strong style="color: white; margin-left: 0.5em;">RECOMMENDED BY STAFF:</strong>
+        <span style="padding-left: 0.5em; font-style: italic;">"{{ recommends.0.text }}"</span>
+        <span style="padding-left: 0.5em; font-weight: bold;">by {{ recommends.0.user }}</span>
+    </div>
+</div>
+{% elif user.is_staff %}
+<h4>Recommend this event</h4>
+<form method="POST">
+    {% csrf_token %}
+    <fieldset class="form-group">
+        {{ recommendForm|crispy }}
+    </fieldset>
+    <div class="form-group">
+        <button class="btn btn-outline-info" name="recommend_post" type="=submit"><b>Submit</b></button>
+    </div>
+</form>
+{% endif %}
 <h1>{{event.title}}</h1>
 {% if user.id %}
 {% if my_event|length > 0 %}
@@ -46,7 +66,7 @@
         {{ ratingForm }}
     </fieldset>
     <div class="form-group">
-        <button class="btn btn-outline-info"  name="rating_post" type="=submit"><b>Save</b></button>
+        <button class="btn btn-outline-info" name="rating_post" type="=submit"><b>Save</b></button>
     </div>
 </form>
 </p>
@@ -55,80 +75,56 @@
 
 <div style="color: black !important; font-weight: bold;">Announcements:</div>
 {% if announcements|length > 0 %}
-    {% for u in announcements %}
-        {% if u.EventId == event.id %}
-        <div class="article-metadata" style="color: green !important;"> {{ u.announcement }}
-            <span style="color: black !important; font-size: small;">{{ u.create_date }}</span>
-        </div>
-        {% endif %}
-    {% endfor %}
+{% for u in announcements %}
+{% if u.EventId == event.id %}
+<div class="article-metadata" style="color: green !important;"> {{ u.announcement }}
+    <span style="color: black !important; font-size: small;">{{ u.create_date }}</span>
+</div>
+{% endif %}
+{% endfor %}
 {% else %}
 <div class="article-metadata">
     No announcements
 </div>
 {% endif %}
 {% endif %}
-<br/>
-
-<div style="color: black !important; font-weight: bold;">Webmasters Recommendation: </div>
-{% if recommends|length > 0 %}
-    {% for c in recommends %}
-    {% for r in reports %}
-    {% if r.CommentId == c %}
-        <strong style="color: red;">
-        Reported
-        </strong>
-    {% endif %}    
-    {% endfor %}
-        <div class="article-metadata {{c_class}}"  > 
-            <div class="d-flex" style="align-items: center">
-                {{ c.text }}
-                <div><span class="p-2" style="color: green !important; font-size: small;">{{ c.create_date }}</span></div>
-            </div>
-        </div>
-    {% endfor %}
-{% else %}
-    <div class="article-metadata">
-        No Recommend
-    </div>
-{% endif %}
-<br/>
+<br />
 
 <div style="color: black !important; font-weight: bold;">Comments: </div>
 {% if comments|length > 0 %}
-    {% for c in comments %}
-    {% for r in reports %}
-    {% if r.CommentId == c %}
-        <strong style="color: red;">
-        Reported
-        </strong>
-    {% endif %}    
-    {% endfor %}
-        <div class="article-metadata {{c_class}}"  > 
-            <div class="d-flex" style="align-items: center">
-                {{ c.text }}
-                <span class="p-2" style="color: black !important; font-weight: bold; font-size: small;"> by {{ c.user }} </span>
-                <span class="p-2" style="color: black !important; font-size: small;">{{ c.create_date }}</span>
-                {% if user.is_staff or user == c.user  %}
-                    <a class="p-2 ml-auto" href="{% url 'delete_comment' c.id %}" >
-                        Delete
-                    </a>
-                {% endif %}
-                {% if user != c.user  %}
-                <a style="color: red" class="p-2 ml-auto" href="{% url 'report_comment' c.id %}" >
-                    Report
-                </a>
-                {% endif %}
-            </div>
-        </div>
-    {% endfor %}
-{% else %}
-    <div class="article-metadata">
-        No Comments
-    </div>
+{% for c in comments %}
+{% for r in reports %}
+{% if r.CommentId == c %}
+<strong style="color: red;">
+    Reported
+</strong>
 {% endif %}
-<br/>
-<br/>
+{% endfor %}
+<div class="article-metadata {{c_class}}">
+    <div class="d-flex" style="align-items: center">
+        {{ c.text }}
+        <span class="p-2" style="color: black !important; font-weight: bold; font-size: small;"> by {{ c.user }} </span>
+        <span class="p-2" style="color: black !important; font-size: small;">{{ c.create_date }}</span>
+        {% if user.is_staff or user == c.user  %}
+        <a class="p-2 ml-auto" href="{% url 'delete_comment' c.id %}">
+            Delete
+        </a>
+        {% endif %}
+        {% if user != c.user  %}
+        <a style="color: red" class="p-2 ml-auto" href="{% url 'report_comment' c.id %}">
+            Report
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="article-metadata">
+    No Comments
+</div>
+{% endif %}
+<br />
+<br />
 <form method="POST">
     {% csrf_token %}
     <fieldset class="form-group">
@@ -137,9 +133,5 @@
     <div class="form-group">
         <button class="btn btn-outline-info" name="comment_post" type="=submit"><b>Add Comment</b></button>
     </div>
-
-<br/>
-<br/>
-<br/>
-
+</form>
 {% endblock content %}
