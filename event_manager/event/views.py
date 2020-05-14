@@ -91,7 +91,7 @@ def view_event(request, id):
         'ratings_avg': RateEvent.objects.filter(EventId=id).aggregate(Avg('rate')),
         'my_rating': my_rating,
         'comments': EventComment.objects.all().filter(EventId=id),
-        #'recommends': EventRecommend.objects.all().filter(EventId=id),
+        'recommends': EventRecommend.objects.all().filter(EventId=id),
         'my_event': my_event,
         'ratingForm': ratingForm,
         'commentForm': commentForm,
