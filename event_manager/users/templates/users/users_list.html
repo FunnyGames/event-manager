@@ -1,0 +1,16 @@
+{% extends "event/base.html" %} {% load crispy_forms_tags %} {% block content %}
+<h1>Users:</h1>
+
+{% for u in users %}
+<article class="media content-section">
+    <div class="article-metadata" style="color: black !important;">
+        <div style="color: black !important;">
+            <b>Username:</b> {{u.username}}<br />
+            <b>First name:</b> {{u.first_name}}<br />
+            <b>Last name:</b> {{u.last_name}}<br />
+            <b>Email:</b> {{u.email}}
+        </div>
+    </div>
+</article>
+{% endfor %}
+{% endblock content %}

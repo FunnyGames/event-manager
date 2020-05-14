@@ -1,9 +1,8 @@
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm
 from django.contrib.auth.models import User
-
 
 
 # Create your views here.
@@ -30,5 +29,9 @@ def profile(request):
     return render(request, 'users/profile.html')
 
 
-
-
+@login_required
+def users(request):
+    context = {
+        'users': User.objects.all()
+    }
+    return render(request, 'users/users_list.html', context)

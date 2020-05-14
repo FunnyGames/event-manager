@@ -34,6 +34,11 @@
                         <a class="nav-item nav-link" href="{% url 'event-home' %}">Home</a>
                         <a class="nav-item nav-link" href="{% url 'event-recommended_list' %}">Recommended Events</a>
                         <a class="nav-item nav-link" href="{% url 'event-event_list' %}">All Events</a>
+                        {% if user.is_authenticated %}
+                        {% if user.is_superuser %}
+                        <a class="nav-item nav-link" href="{% url 'users-list' %}">Users</a>
+                        {% endif %}
+                        {% endif %}
                     </div>
                     <!-- Navbar Right Side -->
                     <div class="navbar-nav">
