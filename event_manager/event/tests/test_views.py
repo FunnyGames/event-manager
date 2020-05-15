@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from ..models import Event, CancelledEvent, EventUpdates, RateEvent, MyEvent, EventComment
+from ..models import Event, CancelledEvent, EventUpdates, RateEvent, MyEvent, EventComment,EventRecommend
 from django.contrib.auth.models import User
 
 
@@ -32,8 +32,11 @@ class ViewEventTest(TestCase):
 
         CommentId = EventComment.objects.create(
             EventId=2, user=test_user1, text="test")
-
         CommentId.save()
+
+        RecommendId = EventRecommend.objects.create(
+            EventId=2, user=test_user1, text="test")
+        RecommendId.save()
 
         test_cancelled_event = CancelledEvent.objects.create(EventId=1)
         test_cancelled_event.save()
