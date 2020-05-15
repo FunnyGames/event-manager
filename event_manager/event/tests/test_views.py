@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from ..models import Event, CancelledEvent, EventUpdates, RateEvent, MyEvent, EventComment,EventRecommend
+from ..models import Event, CancelledEvent, EventUpdates, RateEvent, MyEvent, EventComment, EventRecommend
 from django.contrib.auth.models import User
 
 
@@ -33,6 +33,10 @@ class ViewEventTest(TestCase):
         CommentId = EventComment.objects.create(
             EventId=2, user=test_user1, text="test")
         CommentId.save()
+
+        CommentToDelete = EventComment.objects.create(
+            EventId=1, user=test_user1, text="to delete")
+        CommentToDelete.save()
 
         RecommendId = EventRecommend.objects.create(
             EventId=2, user=test_user1, text="test")
@@ -72,3 +76,14 @@ class ViewEventTest(TestCase):
         response = self.client.get(reverse('report_comment', args=[1]))
         self.assertRedirects(
             response, '/event/2/')
+    
+    def test_redirect_if_report_delete(self):
+        login = self.client.login(username='testuser1', password='Aa123123')
+        response = self.client.get(reverse('delete_comment', args=[2]))
+        self.assertRedirects(response, '/event/1/')
+    
+    def test_delete_comment(self):
+        login = self.client.login(username='testuser1', password='Aa123123')
+        self.client.get(reverse('delete_comment', args=[2]))
+        comment = EventComment.objects.all().filter(EventId=1)
+        self.assertQuerysetEqual(comment, [])
