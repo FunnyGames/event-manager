@@ -32,6 +32,12 @@ pipeline {
             post {
                 always {
                     junit 'event_manager/reports/junit.xml'
+                    recordIssues(
+                        tool: pep8(pattern: 'event_manager/reports/pep8.report'),
+                        unstableTotalAll: 200,
+                        failedTotalAll: 220
+                    )
+                    cobertura coberturaReportFile: 'event_manager/reports/coverage.xml'
                 }
                 success {
                     notifyBuild('SUCCESS')
