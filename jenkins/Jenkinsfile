@@ -37,7 +37,6 @@ pipeline {
                         unstableTotalAll: 200,
                         failedTotalAll: 220
                     )
-                    cobertura coberturaReportFile: 'event_manager/reports/coverage.xml'
                 }
                 success {
                     notifyBuild('SUCCESS')
