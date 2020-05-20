@@ -47,6 +47,8 @@ Run the following commands to install requirements for tests:
 
 `pip install pyflakes`
 
+`pip install pylint`
+
 
 To run tests, use:
 `python manage.py jenkins --enable-coverage`

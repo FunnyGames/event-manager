@@ -26,6 +26,7 @@ pipeline {
                     sh 'pip install \'coverage==4.5.4\''
                     sh 'pip install pep8'
                     sh 'pip install pyflakes'
+                    sh 'pip install pylint'
                     sh 'cd event_manager && python manage.py jenkins --enable-coverage'
                 }
             }
