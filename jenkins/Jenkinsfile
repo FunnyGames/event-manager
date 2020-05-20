@@ -38,9 +38,9 @@ pipeline {
                         failedTotalAll: 220
                     )
                     recordIssues(
-                        tool: pyFlakes(pattern: 'event_manager/reports/pyflakes.report'),
-                        unstableTotalAll: 200,
-                        failedTotalAll: 220
+                        tool: pyLint(pattern: 'event_manager/reports/pyflakes.report'),
+                        unstableTotalAll: 20,
+                        failedTotalAll: 30
                     )
                 }
                 success {
