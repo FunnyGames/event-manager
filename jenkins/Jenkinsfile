@@ -37,6 +37,11 @@ pipeline {
                         unstableTotalAll: 200,
                         failedTotalAll: 220
                     )
+                    recordIssues(
+                        tool: pyflakes(pattern: 'event_manager/reports/pyflakes.report'),
+                        unstableTotalAll: 200,
+                        failedTotalAll: 220
+                    )
                 }
                 success {
                     notifyBuild('SUCCESS')
