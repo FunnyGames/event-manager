@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import UserRegisterForm, ResetPasswordForm
+from .forms import UserRegisterForm, ResetPasswordForm, ResetPasswordEnterForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from .email import sendResetPasswordEmail
+from .email import sendResetPasswordEmail, generateKey, timeIsValid
 
 # Create your views here.
 
@@ -60,13 +60,65 @@ def resetPassword(request):
         form = ResetPasswordForm(request.POST)
         if form.is_valid():
             email = request.POST.get('email')
-            sendResetPasswordEmail(email)
-            messages.success(
-                request, f'Successfully sent email to {email} with instructions')
-            return redirect('login')
+            users = User.objects.filter(email=email)
+            if len(users) > 0:
+                sendResetPasswordEmail(email)
+                messages.success(
+                    request, f'Successfully sent email to {email} with instructions')
+                return redirect('login')
+            else:
+                messages.warning(
+                    request, f'Email {email} not found')
     else:
         form = ResetPasswordForm()
     context = {
         'form': form
     }
     return render(request, 'users/reset.html', context)
+
+
+def resetPasswordEnter(request):
+    expire = False
+    bad_sign = False
+    form = None
+    if request.method == 'POST':
+        u = request.GET.get('u')
+        email = request.GET.get('email')
+        key = request.GET.get('key')
+        if u == None or email == None or key == None:
+            bad_sign = True
+        else:
+            if timeIsValid(u):
+                if generateKey(email, u) == key:
+                    form = ResetPasswordEnterForm(request.POST)
+                    if form.is_valid():
+                        u = User.objects.get(email=email)
+                        u.set_password(request.POST.get('password1'))
+                        u.save()
+                        messages.success(
+                            request, f'Successfully changed password')
+                        return redirect('login')
+                else:
+                    bad_sign = True
+            else:
+                expire = True
+    else:
+        u = request.GET.get('u')
+        email = request.GET.get('email')
+        key = request.GET.get('key')
+        if u == None or email == None or key == None:
+            bad_sign = True
+        else:
+            if timeIsValid(u):
+                if generateKey(email, u) == key:
+                    form = ResetPasswordEnterForm()
+                else:
+                    bad_sign = True
+            else:
+                expire = True
+    context = {
+        'form': form,
+        'expire': expire,
+        'bad_sign': bad_sign
+    }
+    return render(request, 'users/reset_password_enter.html', context)

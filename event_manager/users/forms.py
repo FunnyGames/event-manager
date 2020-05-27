@@ -13,3 +13,10 @@ class UserRegisterForm(UserCreationForm):
 
 class ResetPasswordForm(forms.Form):
     email = forms.EmailField()
+
+
+class ResetPasswordEnterForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = ['password1', 'password2']
