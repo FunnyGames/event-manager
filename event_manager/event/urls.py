@@ -8,6 +8,7 @@ urlpatterns = [
     path('event/<int:id>/', views.view_event, name='event-view'),
     path('event/delete-comment/<int:id>/',views.delete_comment, name='delete_comment'),
     path('event/report-comment/<int:id>/', views.report_comment, name='report_comment'),
+    path('event/choose-comment/<int:id>/', views.choose_comment, name='choose_comment'),
     path('recommended/', views.recommended_event_list, name='event-recommended_list'),
     path('myevents/', views.my_events, name='event-my_events'),
     path('myevents/past', views.my_events_past, name='event-my_events_past'),

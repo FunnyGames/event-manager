@@ -104,3 +104,18 @@ class ReportComment(models.Model):
 
     def __str__(self):
         return str(self.EventId) + ' - ' + str(self.user)
+
+class ChooseComment(models.Model):
+    EventId = models.IntegerField(default=0)
+    CommentId = models.ForeignKey(EventComment, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    create_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=['user', 'EventId', 'CommentId'], name='choose_once')
+        ]
+
+    def __str__(self):
+        return str(self.EventId) + ' - ' + str(self.user)

@@ -10,6 +10,7 @@ from .models import MyEvent
 from .models import EventComment
 from .models import EventRecommend
 from .models import ReportComment
+from .models import ChooseComment
 from django.db.models import Avg
 from .forms import RateEventForm, eventCommentForm, eventRecommendForm
 from datetime import date
@@ -106,11 +107,29 @@ def view_event(request, id):
         'ratingForm': ratingForm,
         'commentForm': commentForm,
         'recommendForm': recommendForm,
-        'reports': ReportComment.objects.filter(EventId=id)
+        'reports': ReportComment.objects.filter(EventId=id),
+        'chooseComment': ChooseComment.objects.filter(EventId=id)
+        
     }
 
     return render(request, 'event/event.html', context)
 
+@login_required
+def choose_comment(request, id):
+    try:
+        comment = EventComment.objects.get(id=id)
+        EventId = comment.EventId
+        choosecommemt = request.POST.get('id', None)
+        if (EventId != None):
+            ChooseComment.objects.create(
+                EventId=EventId, CommentId=comment, user=request.user)
+            messages.success(
+                request, f'LIKE Comment Successfull')
+    except:
+        messages.warning(
+            request, f'ERROR - You are already do LIKE on this comment')
+
+    return redirect('event-view', id=EventId)
 
 @login_required
 def my_events(request):
@@ -196,3 +215,5 @@ def report_comment(request, id):
             request, f'ERROR - Already Reported?')
 
     return redirect('event-view', id=EventId)
+
+

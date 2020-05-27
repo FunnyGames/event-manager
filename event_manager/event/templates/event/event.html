@@ -92,14 +92,16 @@
 
 <div style="color: black !important; font-weight: bold;">Comments: </div>
 {% if comments|length > 0 %}
-{% for c in comments %}
-{% for r in reports %}
-{% if r.CommentId == c %}
-<strong style="color: red;">
-    Reported
-</strong>
-{% endif %}
-{% endfor %}
+    {% for c in comments %}
+        
+        {% for r in reports %}
+            {% if r.CommentId == c %}
+                <strong style="color: red;">
+                    Reported
+                </strong>
+            {% endif %}
+        {% endfor %}
+
 <div class="article-metadata {{c_class}}">
     <div class="d-flex" style="align-items: center">
         {{ c.text }}
@@ -115,7 +117,21 @@
             Report
         </a>
         {% endif %}
+
+        
+
+
+
+
+        
     </div>
+
+
+
+
+
+
+
 </div>
 {% endfor %}
 {% else %}
