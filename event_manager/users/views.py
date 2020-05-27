@@ -55,17 +55,21 @@ def users(request):
     return render(request, 'users/users_list.html', context)
 
 
-def resetPassword(request):
+def adminResetPassword(request):
     if request.method == 'POST':
         form = ResetPasswordForm(request.POST)
         if form.is_valid():
             email = request.POST.get('email')
             users = User.objects.filter(email=email)
             if len(users) > 0:
-                sendResetPasswordEmail(email)
-                messages.success(
-                    request, f'Successfully sent email to {email} with instructions')
-                return redirect('login')
+                if (users[0].is_superuser):
+                    sendResetPasswordEmail(email)
+                    messages.success(
+                        request, f'Successfully sent email to {email} with instructions')
+                    return redirect('login')
+                else:
+                    messages.warning(
+                        request, f'Email {email} not found')
             else:
                 messages.warning(
                     request, f'Email {email} not found')
@@ -74,10 +78,10 @@ def resetPassword(request):
     context = {
         'form': form
     }
-    return render(request, 'users/reset.html', context)
+    return render(request, 'admin/reset.html', context)
 
 
-def resetPasswordEnter(request):
+def adminResetPasswordEnter(request):
     expire = False
     bad_sign = False
     form = None
@@ -121,4 +125,4 @@ def resetPasswordEnter(request):
         'expire': expire,
         'bad_sign': bad_sign
     }
-    return render(request, 'users/reset_password_enter.html', context)
+    return render(request, 'admin/reset_password_enter.html', context)
