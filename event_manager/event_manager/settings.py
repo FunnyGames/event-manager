@@ -155,3 +155,11 @@ JENKINS_TASKS = (
     'django_jenkins.tasks.run_pyflakes',
     'django_jenkins.tasks.run_pylint'
 )
+
+# EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_USER = 'event.manager.project.sce@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = 'e123456789vent'

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from .forms import UserRegisterForm, ResetPasswordForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from .email import sendResetPasswordEmail
 
 # Create your views here.
 
@@ -57,7 +58,12 @@ def users(request):
 def resetPassword(request):
     if request.method == 'POST':
         form = ResetPasswordForm(request.POST)
-        print(form)
+        if form.is_valid():
+            email = request.POST.get('email')
+            sendResetPasswordEmail(email)
+            messages.success(
+                request, f'Successfully sent email to {email} with instructions')
+            return redirect('login')
     else:
         form = ResetPasswordForm()
     context = {
