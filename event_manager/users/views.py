@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import UserRegisterForm
+from .forms import UserRegisterForm, ResetPasswordForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 
@@ -52,3 +52,15 @@ def users(request):
         'page_obj': p.get_page(page)
     }
     return render(request, 'users/users_list.html', context)
+
+
+def resetPassword(request):
+    if request.method == 'POST':
+        form = ResetPasswordForm(request.POST)
+        print(form)
+    else:
+        form = ResetPasswordForm()
+    context = {
+        'form': form
+    }
+    return render(request, 'users/reset.html', context)
