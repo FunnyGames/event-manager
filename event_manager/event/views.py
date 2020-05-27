@@ -119,7 +119,6 @@ def choose_comment(request, id):
     try:
         comment = EventComment.objects.get(id=id)
         EventId = comment.EventId
-        choosecommemt = request.POST.get('id', None)
         if (EventId != None):
             ChooseComment.objects.create(
                 EventId=EventId, CommentId=comment, user=request.user)

@@ -71,12 +71,16 @@ class ViewEventTest(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_redirect_if_report_comment(self):
-        login = self.client.login(
-            username='testuser1', password='Aa123123')
+        login = self.client.login(username='testuser1', password='Aa123123')
         response = self.client.get(reverse('report_comment', args=[1]))
-        self.assertRedirects(
-            response, '/event/2/')
-    
+        self.assertRedirects(response, '/event/2/')
+
+    def test_redirect_if_choose_comment(self):
+        login = self.client.login(username='testuser1', password='Aa123123')
+        response = self.client.get(reverse('choose_comment', args=[1]))
+        self.assertRedirects(response, '/event/2/')
+
+
     def test_redirect_if_report_delete(self):
         login = self.client.login(username='testuser1', password='Aa123123')
         response = self.client.get(reverse('delete_comment', args=[2]))

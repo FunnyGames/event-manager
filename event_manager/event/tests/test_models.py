@@ -193,3 +193,29 @@ class ReportCommentTest:
         report = ReportComment.objects.get(id=1)
         auto = report._meta.get_field('create_date').auto_now
         self.assertEquals(auto, True)
+
+
+class ChooseCommentTest:
+    @classmethod
+    def setUpTestData(cls):
+        # Set up non-modified objects used by all test methods
+        # Run once to set up non-modified data for all class methods.
+        user = User.objects.create(
+            username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
+        ChooseComment.objects.create(
+            EventId=2,
+            user=user,
+            CommentId=EventComment.objects.create(
+                EventId=2, user=user, text="test")
+
+        )
+
+    def test_EventId_default(self):
+        choosecomment = ChooseComment.objects.get(id=1)
+        default = choosecomment._meta.get_field('EventId').default
+        self.assertEquals(default, 0)
+
+    def test_create_date_auto_now(self):
+        choosecomment = ChooseComment.objects.get(id=1)
+        auto = choosecomment._meta.get_field('create_date').auto_now
+        self.assertEquals(auto, True)
