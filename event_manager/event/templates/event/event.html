@@ -117,21 +117,21 @@
             Report
         </a>
         {% endif %}
-
-        
-
-
-
-
-        
+        {% if user != c.user  %}
+        <a style="color: blue" class="p-2 ml-auto" href="{% url 'choose_comment' c.id %}">
+            LIKE
+        </a>
+        {% endif %}
     </div>
-
-
-
-
-
-
-
+{% for b in chooseComment %}
+    <div>
+        {% if b.CommentId == c %}
+            <strong  font:Segoe UI ; style="color: BLUE;">
+                LIKED  <span class="p-2" style="color: black !important; font-size: small;">(by {{ b.user }})</span>
+            </strong>
+        {% endif %}
+    </div>
+    {% endfor %}
 </div>
 {% endfor %}
 {% else %}
