@@ -114,6 +114,21 @@ def view_event(request, id):
 
     return render(request, 'event/event.html', context)
 
+def top_rated_list(request):
+
+    events = Event.objects.all()
+    rating = RateEvent.objects.values('EventId').annotate(aRate=Avg('rate')).order_by('-aRate')[:5]
+
+    print(rating)
+    context = {
+        'events': Event.objects.all(),
+        'announcements': EventUpdates.objects.all(),
+        'cancelled_events': CancelledEvent.objects.all(),
+        'events_avg_rating': rating
+    }
+    return render(request, 'event/top_rate_list.html', context)
+
+
 @login_required
 def choose_comment(request, id):
     try:

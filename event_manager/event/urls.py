@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.home, name='event-home'),
     path('about/', views.about, name='event-about'),
     path('event_list/', views.event_list, name='event-event_list'),
+    path('top-rated/', views.top_rated_list, name='event-top-rated'),
     path('event/<int:id>/', views.view_event, name='event-view'),
     path('event/delete-comment/<int:id>/',views.delete_comment, name='delete_comment'),
     path('event/report-comment/<int:id>/', views.report_comment, name='report_comment'),
