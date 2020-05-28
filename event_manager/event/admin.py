@@ -1,4 +1,4 @@
-from django.contrib import admin
+from users.admin import admin_site
 from .models import Event
 from .models import CancelledEvent
 from .models import EventUpdates
@@ -10,12 +10,12 @@ from .models import ReportComment
 from .models import ChooseComment
 
 # Register your models here.
-admin.site.register(Event)
-admin.site.register(CancelledEvent)
-admin.site.register(EventUpdates)
-admin.site.register(RateEvent)
-admin.site.register(MyEvent)
-admin.site.register(EventComment)
-admin.site.register(EventRecommend)
-admin.site.register(ReportComment)
-admin.site.register(ChooseComment)
+admin_site.register(Event)
+admin_site.register(CancelledEvent)
+admin_site.register(EventUpdates)
+admin_site.register(RateEvent)
+admin_site.register(MyEvent)
+admin_site.register(EventComment)
+admin_site.register(EventRecommend)
+admin_site.register(ReportComment)
+admin_site.register(ChooseComment)
