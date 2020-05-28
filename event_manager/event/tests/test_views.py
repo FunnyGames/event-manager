@@ -66,6 +66,15 @@ class ViewEventTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'event/event.html')
 
+    def test_view_Event_Top_Rated_url_exists_at_desired_location(self):
+        response = self.client.get(reverse('event-top-rated'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_Event_Top_Rated_uses_correct_template(self):
+        response = self.client.get(reverse('event-top-rated'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'event/top_rate_list.html')
+
     def test_view_not_found(self):
         response = self.client.get(reverse('event-view', args=[1000]))
         self.assertEqual(response.status_code, 404)
