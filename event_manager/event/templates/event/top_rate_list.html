@@ -1,5 +1,39 @@
 {% extends "event/base.html" %}
 {% block content %}
 <h1>Top 5 Events:</h1>
+{% for eventAvg in events_avg_rating %}
+    {% for event in events %}
+        {% for cancelled in cancelled_events %}
+            {% if eventAvg.EventId == event.id and event.id != cancelled.EventId %}
+            <article class="media content-section">
+                <div class="media-body">
+                    {% if event.cancelled %}
+                        <div class="article-metadata" style="color: red !important;">
+                            <b>This event is officially cancelled.</b>
+                        </div>
+                    {% endif %}
+                    <div class="article-metadata">
+                        <small class="text-muted">{{ event.start_date }}</small>
+                    </div>
+                    <p class="article-content">Rating: {{ eventAvg.aRate }}</p>
+                    <h2><a class="article-title" href="{% url 'event-view' event.id %}">{{ event.title }}</a></h2>
+                    <p class="article-content">{{ event.description }}</p>
+                    <p class="article-content"><b>Date range:</b> {{ event.start_date }} - {{ event.end_date }}</p>
+                    <p class="article-content"><b>Capacity:</b> {{ event.capacity }}</p>
+                    <p class="article-content"><b>Place:</b> {{ event.place }}</p>
+                    {% for u in announcements %}
+                        {% if u.EventId == event.id %}
+                        <div class="article-metadata" style="color: green !important;">
+                            <div style="color: black !important; font-weight: bold;">Announcement:</div> {{ u.announcement }}
+                            <span style="color: black !important; font-size: small;">{{ u.create_date }}</span>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </article>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endfor %}
 
 {% endblock content %}
