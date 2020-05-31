@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import UserRegisterForm, ResetPasswordForm, ResetPasswordEnterForm
+from .forms import UserRegisterForm, ResetPasswordForm, ResetPasswordEnterForm,EditProfileForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from .email import sendResetPasswordEmail, generateKey, timeIsValid
+from django.urls import reverse
+
+from django.contrib.auth.forms import UserChangeForm
 
 # Create your views here.
 
@@ -27,7 +30,24 @@ def register(request):
 
 @login_required
 def profile(request):
-    return render(request, 'users/profile.html')
+    args = {'user': request.user}
+    return render(request, 'users/profile.html',args)
+
+
+def edit_profile(request):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=request.user)
+
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request, f' Your profile edit successfull')
+            return redirect('edit_profile')
+    else:
+        form = EditProfileForm(instance=request.user)
+        args = {'form': form}
+        return render(request, 'users/edit_profile.html',args)
+
 
 
 @login_required
