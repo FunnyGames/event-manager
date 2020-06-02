@@ -13,7 +13,7 @@ from .models import ReportComment
 from .models import ChooseComment
 from django.db.models import Avg
 from .forms import RateEventForm, eventCommentForm, eventRecommendForm
-from datetime import date
+from datetime import date, timedelta
 
 # Create your views here.
 
@@ -109,15 +109,17 @@ def view_event(request, id):
         'recommendForm': recommendForm,
         'reports': ReportComment.objects.filter(EventId=id),
         'chooseComment': ChooseComment.objects.filter(EventId=id)
-        
+
     }
 
     return render(request, 'event/event.html', context)
 
+
 def top_rated_list(request):
 
     events = Event.objects.all()
-    rating = RateEvent.objects.values('EventId').annotate(aRate=Avg('rate')).order_by('-aRate')[:5]
+    rating = RateEvent.objects.values('EventId').annotate(
+        aRate=Avg('rate')).order_by('-aRate')[:5]
 
     print(rating)
     context = {
@@ -144,6 +146,7 @@ def choose_comment(request, id):
             request, f'ERROR - You are already do LIKE on this comment')
 
     return redirect('event-view', id=EventId)
+
 
 @login_required
 def my_events(request):
@@ -231,3 +234,42 @@ def report_comment(request, id):
     return redirect('event-view', id=EventId)
 
 
+@login_required
+def calendar(request):
+    events = Event.objects.filter(
+        start_date__gte=date.today()).order_by('start_date')
+
+    my_events = MyEvent.objects.filter(user_id=request.user.id)
+    cancelled_events = CancelledEvent.objects.all()
+
+    ev = []
+    year_break = []
+    month_break = []
+    year = 0
+    month = 0
+    for e in events:
+        for my in my_events:
+            cancelled = False
+            for can in cancelled_events:
+                if e.id == can.EventId:
+                    cancelled = True
+                    break
+            if cancelled:
+                continue
+            if e.id == my.EventId:
+                ev.append(e)
+                if year != e.start_date.year:
+                    year = e.start_date.year
+                    year_break.append(e.id)
+                    month = 0
+                if month != e.start_date.month:
+                    breakm = month != 0
+                    month = e.start_date.month
+                    month_break.append({'id': e.id, 'break': breakm})
+
+    context = {
+        'events': ev,
+        'year_break': year_break,
+        'month_break': month_break
+    }
+    return render(request, 'event/calendar.html', context)
