@@ -20,5 +20,5 @@ urlpatterns = [
     path('myevents/all', views.my_events_all, name='event-my_events_all'),
     path('myevents/<int:id>/delete', views.remove_my_event,
          name='event-remove_my_event'),
-    path('calendar', views.calendar, name='event-calendar'),
+    path('calendar/', views.calendar, name='event-calendar'),
 ]
