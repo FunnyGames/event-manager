@@ -160,7 +160,7 @@ def choose_comment(request, id):
                 request, f'LIKE Comment Successfull')
     except:
         messages.warning(
-            request, f'ERROR - You are already do LIKE on this comment')
+            request, f'ERROR - You are already liked this comment')
 
     return redirect('event-view', id=EventId)
 
