@@ -53,7 +53,8 @@
 <p class="article-content">
     <b>Date range:</b> {{ event.start_date }} - {{ event.end_date }}
 </p>
-<p class="article-content"><b>Capacity:</b> {{ registered_users }} / {{ event.capacity }}</p>
+<p class="article-content"><b>Capacity:</b> {{ registered_users }} / {{ event.capacity }}
+    <a href="{% url 'event-users' event.id %}">View all users who attend this event</a></p>
 <p class="article-content"><b>Place:</b> {{ event.place }}</p>
 <p class="article-content"><b>Rating:</b> {{ ratings_avg.rate__avg }}/5 (by {{ ratings_counts }} users)</p>
 {% if user.id %}
@@ -92,21 +93,23 @@
 
 <div style="color: black !important; font-weight: bold;">Comments: </div>
 {% if comments|length > 0 %}
-    {% for c in comments %}
-        
-        {% for r in reports %}
-            {% if r.CommentId == c %}
-                <strong style="color: red;">
-                    Reported
-                </strong>
-            {% endif %}
-        {% endfor %}
+{% for c in comments %}
+
+{% for r in reports %}
+{% if r.CommentId == c %}
+<strong style="color: red;">
+    Reported
+</strong>
+{% endif %}
+{% endfor %}
 
 <div class="article-metadata {{c_class}}">
     <div class="d-flex" style="align-items: center">
         {{ c.text }}
         <span class="p-2" style="color: black !important; font-weight: bold; font-size: small;"> by {{ c.user }} </span>
         <span class="p-2" style="color: black !important; font-size: small;">{{ c.create_date }}</span>
+
+        {% if user.is_authenticated %}
         {% if user.is_staff or user == c.user  %}
         <a class="p-2 ml-auto" href="{% url 'delete_comment' c.id %}">
             Delete
@@ -122,16 +125,16 @@
             LIKE
         </a>
         {% endif %}
-    </div>
-{% for b in chooseComment %}
-    <div>
-        {% if b.CommentId == c %}
-            <strong  font:Segoe UI ; style="color: BLUE;">
-                LIKED  <span class="p-2" style="color: black !important; font-size: small;">(by {{ b.user }})</span>
-            </strong>
         {% endif %}
     </div>
-    {% endfor %}
+    <div>
+        <strong>LIKES:</strong>
+        {% for b in chooseComment %}
+        {% if b.CommentId == c %}
+        <span class="p-2" style="color: black !important; font-size: small; font-weight: bolder;">{{ b.user }}</span>
+        {% endif %}
+        {% endfor %}
+    </div>
 </div>
 {% endfor %}
 {% else %}

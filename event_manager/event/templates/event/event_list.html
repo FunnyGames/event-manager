@@ -2,7 +2,7 @@
 {% block content %}
 <h1>Event List:</h1>
 
-{% for event in events %}
+{% for event in page_obj %}
 {% for cancelled in cancelled_events %}
 {% if event.id != cancelled.EventId %}
 <article class="media content-section">
@@ -36,4 +36,21 @@
 {% endif %}
 {% endfor %}
 {% endfor %}
+<div class="pagination" style="justify-content: center; padding-bottom: 5em;">
+  <span class="step-links">
+    {% if page_obj.has_previous %}
+    <a href="?page=1">&laquo; first</a>
+    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+    {% endif %}
+
+    <span class="current">
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    </span>
+
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}">next</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+    {% endif %}
+  </span>
+</div>
 {% endblock content %}
