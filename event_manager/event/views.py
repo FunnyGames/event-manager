@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.db import connection
 from .models import Event
 from .models import CancelledEvent
@@ -30,8 +31,24 @@ def about(request):
 
 
 def event_list(request):
+    page = request.GET.get('page')
+    limit = request.GET.get('limit')
+    if limit == None:
+        limit = 5
+    else:
+        limit = int(limit)
+        if limit < 1 or limit > 20:
+            limit = 5
+
+    p = Paginator(Event.objects.all(), limit)
+    if page == None:
+        page = 1
+    else:
+        page = int(page)
+        if page < 1 or page > p.num_pages:
+            page = 1
     context = {
-        'events': Event.objects.all(),
+        'page_obj': p.get_page(page),
         'announcements': EventUpdates.objects.all(),
         'cancelled_events': CancelledEvent.objects.all()
     }
@@ -273,3 +290,11 @@ def calendar(request):
         'month_break': month_break
     }
     return render(request, 'event/calendar.html', context)
+
+
+def users_attend(request, id):
+    context = {
+        'event': get_object_or_404(Event, id=id),
+        'users': MyEvent.objects.filter(EventId=id)
+    }
+    return render(request, 'event/users_attend.html', context)
