@@ -22,6 +22,11 @@ class UserLoginTest(TestCase):
 
         test_user1.save()
 
+        test_banned_user1 = User.objects.create_user(
+            username='testuser2', password='Aa123123', is_active=False)
+
+        test_banned_user1.save()
+
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get(reverse('login'))
         self.assertEqual(response.status_code, 200)
@@ -48,6 +53,14 @@ class UserLoginTest(TestCase):
 
         # Check we used correct template
         self.assertTemplateUsed(response, 'users/profile.html')
+
+    def test_banned_user_login(self):
+        login = self.client.login(
+            username='testuser2', password='Aa123123')
+        response = self.client.get(reverse('profile'))
+
+        # Check that we got a response "failed" and moved to login
+        self.assertEqual(response.status_code, 302)
 
 
 class UserLogoutTest(TestCase):
