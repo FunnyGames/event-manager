@@ -1,0 +1,59 @@
+#branding h1, #branding h1 a:link, #branding h1 a:visited {
+    color: white;
+}
+
+#site-name {
+    font-size: 20px;
+    font-family: Lora, 'Times New Roman', serif;
+}
+
+#user-tools {
+    font-weight: 800;
+    color: white;
+}
+
+#header {
+    border-bottom: 1px solid #9029cf;
+    background-color: #9029cf;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.module caption {
+    border-radius: 5px;
+    background-color: #9029cf;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: bolder;
+}
+
+th {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+h1 {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: bolder;
+}
+
+div.breadcrumbs {
+    background-color: #721ea7;
+}
+
+a:link, a:visited {
+    color: #491669;
+}
+
+.submit-row input {
+    background-color: #9029cf;
+}
+
+.button.default, input[type=submit].default, .submit-row input.default {
+    background-color: #491669;
+}
+
+.button.default:active, input[type=submit].default:active, .button.default:focus, input[type=submit].default:focus, .button.default:hover, input[type=submit].default:hover {
+    background-color: #391152;
+}
+
+.button:active, input[type=submit]:active, input[type=button]:active, .button:focus, input[type=submit]:focus, input[type=button]:focus, .button:hover, input[type=submit]:hover, input[type=button]:hover {
+    background-color: #7520aa;
+}
