@@ -50,7 +50,9 @@ def event_list(request):
     context = {
         'page_obj': p.get_page(page),
         'announcements': EventUpdates.objects.all(),
-        'cancelled_events': CancelledEvent.objects.all()
+        'cancelled_events': CancelledEvent.objects.all(),
+        'site_header': 'Event List',
+        'site_subheader': 'Events Of All Times'
     }
     return render(request, 'event/event_list.html', context)
 
@@ -60,7 +62,9 @@ def recommended_event_list(request):
         'events': Event.objects.filter(start_date__gte=date.today()),
         'announcements': EventUpdates.objects.all(),
         'cancelled_events': CancelledEvent.objects.all(),
-        'recommended_events': EventRecommend.objects.all()
+        'recommended_events': EventRecommend.objects.all(),
+        'site_header': 'Recommended Events',
+        'site_subheader': 'All Of Our Recommendations'
     }
     return render(request, 'event/recommended_event_list.html', context)
 
@@ -110,8 +114,10 @@ def view_event(request, id):
             else:
                 ratingForm = RateEventForm()
 
+    event = get_object_or_404(Event, id=id)
+
     context = {
-        'event': get_object_or_404(Event, id=id),
+        'event': event,
         'announcements': EventUpdates.objects.filter(EventId=id),
         'cancelled_event': CancelledEvent.objects.filter(EventId=id),
         'registered_users': MyEvent.objects.filter(EventId=id).count(),
@@ -125,8 +131,11 @@ def view_event(request, id):
         'commentForm': commentForm,
         'recommendForm': recommendForm,
         'reports': ReportComment.objects.filter(EventId=id),
-        'chooseComment': ChooseComment.objects.filter(EventId=id)
-
+        'chooseComment': ChooseComment.objects.filter(EventId=id),
+        'site_header': event.title,
+        'site_subheader': event.description,
+        'site_meta': event.start_date,
+        'site_header_class': 'post-heading'
     }
 
     return render(request, 'event/event.html', context)
@@ -138,12 +147,13 @@ def top_rated_list(request):
     rating = RateEvent.objects.values('EventId').annotate(
         aRate=Avg('rate')).order_by('-aRate')[:5]
 
-    print(rating)
     context = {
         'events': Event.objects.all(),
         'announcements': EventUpdates.objects.all(),
         'cancelled_events': CancelledEvent.objects.all(),
-        'events_avg_rating': rating
+        'events_avg_rating': rating,
+        'site_header': 'Top Events',
+        'site_subheader': 'Our Best Rated Events From Past'
     }
     return render(request, 'event/top_rate_list.html', context)
 
@@ -157,7 +167,7 @@ def choose_comment(request, id):
             ChooseComment.objects.create(
                 EventId=EventId, CommentId=comment, user=request.user)
             messages.success(
-                request, f'LIKE Comment Successfull')
+                request, f'LIKE Comment Successful')
     except:
         messages.warning(
             request, f'ERROR - You are already liked this comment')
@@ -178,7 +188,9 @@ def my_events(request):
         'events': Event.objects.filter(start_date__gte=date.today()),
         'announcements': EventUpdates.objects.all(),
         'cancelled_events': CancelledEvent.objects.all(),
-        'my_events': MyEvent.objects.filter(user_id=request.user.id)
+        'my_events': MyEvent.objects.filter(user_id=request.user.id),
+        'site_header': 'My Nearest Events',
+        'site_subheader': 'Near Events You Are Going To Attend'
     }
     return render(request, 'event/my_events.html', context)
 
@@ -189,7 +201,9 @@ def my_events_past(request):
         'events': Event.objects.filter(start_date__lte=date.today()),
         'announcements': EventUpdates.objects.all(),
         'cancelled_events': CancelledEvent.objects.all(),
-        'my_events': MyEvent.objects.filter(user_id=request.user.id)
+        'my_events': MyEvent.objects.filter(user_id=request.user.id),
+        'site_header': 'My Past Events',
+        'site_subheader': 'Events You Already Attended'
     }
     return render(request, 'event/my_events.html', context)
 
@@ -200,7 +214,9 @@ def my_events_all(request):
         'events': Event.objects.all(),
         'announcements': EventUpdates.objects.all(),
         'cancelled_events': CancelledEvent.objects.all(),
-        'my_events': MyEvent.objects.filter(user_id=request.user.id)
+        'my_events': MyEvent.objects.filter(user_id=request.user.id),
+        'site_header': 'My Events',
+        'site_subheader': 'All Of Your Events You Added To Your Events'
     }
     return render(request, 'event/my_events.html', context)
 
@@ -287,14 +303,19 @@ def calendar(request):
     context = {
         'events': ev,
         'year_break': year_break,
-        'month_break': month_break
+        'month_break': month_break,
+        'site_header': 'Calendar',
+        'site_subheader': ' '
     }
     return render(request, 'event/calendar.html', context)
 
 
 def users_attend(request, id):
+    event = get_object_or_404(Event, id=id)
     context = {
-        'event': get_object_or_404(Event, id=id),
-        'users': MyEvent.objects.filter(EventId=id)
+        'event': event,
+        'users': MyEvent.objects.filter(EventId=id),
+        'site_header': event.title,
+        'site_subheader': 'Attendencies'
     }
     return render(request, 'event/users_attend.html', context)

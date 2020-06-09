@@ -1,12 +1,20 @@
-{% extends "event/base.html" %} {% block content %}
+{% extends "event/base.html" %}
+{% block header %}
+Event Manager
+{% endblock header %}
+{% block subheader %}
+One Place To Organize Events
+{% endblock subheader %}
+
+{% block content %}
 <h1>Welcome to our website</h1>
 
 <article class="media content-section">
 
   <div class="article-metadata" style="color: black !important;">
     <div style="color: black !important; font-weight: bold;">
-      Our website gives solution to all the events that occurred in our city 
-      </div> 
+      Our website gives solution to all the events that occurred in our city
+    </div>
     <span style="color: pink !important; font-size: medium;"> for more information you can press on Event List</span>
   </div>
 </article>

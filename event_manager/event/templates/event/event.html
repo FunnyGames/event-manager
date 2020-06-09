@@ -123,13 +123,13 @@
         {% endif %}
         {% if user != c.user  %}
         <a style="color: blue" class="p-2 ml-auto" href="{% url 'choose_comment' c.id %}">
-            LIKE
+            Like
         </a>
         {% endif %}
         {% endif %}
     </div>
     <div>
-        <strong>LIKES:</strong>
+        <span style="color: black !important; font-weight: bold; font-size: small;">Likes:</span>
         {% for b in chooseComment %}
         {% if b.CommentId == c %}
         <span class="p-2" style="color: black !important; font-size: small; font-weight: bolder;">{{ b.user }}</span>
@@ -145,6 +145,7 @@
 {% endif %}
 <br />
 <br />
+{% if user.is_authenticated %}
 <form method="POST">
     {% csrf_token %}
     <fieldset class="form-group">
@@ -154,4 +155,5 @@
         <button class="btn btn-outline-info" name="comment_post" type="=submit"><b>Add Comment</b></button>
     </div>
 </form>
+{% endif %}
 {% endblock content %}

@@ -7,6 +7,7 @@
 {% if event.id != cancelled.EventId %}
 {% for rec in recommended_events %}
 {% if event.id == rec.EventId %}
+<hr />
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata {{c_class}}">

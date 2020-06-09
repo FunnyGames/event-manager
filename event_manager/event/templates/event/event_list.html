@@ -1,10 +1,10 @@
 {% extends "event/base.html" %}
 {% block content %}
-<h1>Event List:</h1>
 
 {% for event in page_obj %}
 {% for cancelled in cancelled_events %}
 {% if event.id != cancelled.EventId %}
+<hr />
 <article class="media content-section">
   <div class="media-body">
     {% if event.cancelled %}

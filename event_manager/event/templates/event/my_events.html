@@ -7,6 +7,7 @@
 {% if event.id != cancelled.EventId %}
 {% for my in my_events %}
 {% if event.id == my.EventId %}
+<hr />
 <article class="media content-section">
     <div class="media-body">
         {% if event.cancelled %}
