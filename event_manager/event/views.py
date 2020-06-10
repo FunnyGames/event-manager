@@ -12,7 +12,7 @@ from .models import EventComment
 from .models import EventRecommend
 from .models import ReportComment
 from .models import ChooseComment
-from django.db.models import Avg
+from django.db.models import Avg, Count
 from .forms import RateEventForm, eventCommentForm, eventRecommendForm
 from datetime import date, timedelta
 
@@ -21,13 +21,6 @@ from datetime import date, timedelta
 
 def home(request):
     return render(request, 'event/home.html')
-
-
-def about(request):
-    context = {
-        'title': 'About'
-    }
-    return render(request, 'event/about.html', context)
 
 
 def event_list(request):
@@ -143,17 +136,34 @@ def view_event(request, id):
 
 def top_rated_list(request):
 
-    events = Event.objects.all()
-    rating = RateEvent.objects.values('EventId').annotate(
-        aRate=Avg('rate')).order_by('-aRate')[:5]
+    events = Event.objects.filter(start_date__gte=date.today())
+    cancelled_events = CancelledEvent.objects.all()
+    rating = MyEvent.objects.values('EventId').annotate(
+        aRate=Count('EventId')).order_by('-aRate')
+
+    ev = []
+    total = 0
+    for e in events:
+        cancelled = False
+        for can in cancelled_events:
+            if e.id == can.EventId:
+                cancelled = True
+                break
+        if cancelled:
+            continue
+        for r in rating:
+            if e.id == r['EventId']:
+                ev.append(e)
+                total += 1
+        if total == 5:
+            break
 
     context = {
-        'events': Event.objects.all(),
+        'events': ev,
         'announcements': EventUpdates.objects.all(),
-        'cancelled_events': CancelledEvent.objects.all(),
         'events_avg_rating': rating,
         'site_header': 'Top Events',
-        'site_subheader': 'Our Best Rated Events From Past'
+        'site_subheader': 'Top 5 Trending Events'
     }
     return render(request, 'event/top_rate_list.html', context)
 
@@ -190,7 +200,7 @@ def my_events(request):
         'cancelled_events': CancelledEvent.objects.all(),
         'my_events': MyEvent.objects.filter(user_id=request.user.id),
         'site_header': 'My Nearest Events',
-        'site_subheader': 'Near Events You Are Going To Attend'
+        'site_subheader': 'Upcoming Events You Are Going To'
     }
     return render(request, 'event/my_events.html', context)
 
@@ -216,7 +226,7 @@ def my_events_all(request):
         'cancelled_events': CancelledEvent.objects.all(),
         'my_events': MyEvent.objects.filter(user_id=request.user.id),
         'site_header': 'My Events',
-        'site_subheader': 'All Of Your Events You Added To Your Events'
+        'site_subheader': 'All Events You Added To Your Event List'
     }
     return render(request, 'event/my_events.html', context)
 

@@ -1,10 +1,8 @@
 {% extends "event/base.html" %}
 {% block content %}
-<h1>Top 5 Events:</h1>
 {% for eventAvg in events_avg_rating %}
 {% for event in events %}
-{% for cancelled in cancelled_events %}
-{% if eventAvg.EventId == event.id and event.id != cancelled.EventId %}
+{% if eventAvg.EventId == event.id %}
 <hr />
 <article class="media content-section">
     <div class="media-body">
@@ -13,11 +11,10 @@
             <b>This event is officially cancelled.</b>
         </div>
         {% endif %}
-        <div class="article-metadata">
-            <small class="text-muted">{{ event.start_date }}</small>
-        </div>
-        <p class="article-content">Rating: {{ eventAvg.aRate }}</p>
         <h2><a class="article-title" href="{% url 'event-view' event.id %}">{{ event.title }}</a></h2>
+        {% if user.is_staff %}
+        <p class="" style="font-size: small;">Event ID: {{ event.id }}</p>
+        {% endif %}
         <p class="article-content">{{ event.description }}</p>
         <p class="article-content"><b>Date range:</b> {{ event.start_date }} - {{ event.end_date }}</p>
         <p class="article-content"><b>Capacity:</b> {{ event.capacity }}</p>
@@ -33,7 +30,6 @@
     </div>
 </article>
 {% endif %}
-{% endfor %}
 {% endfor %}
 {% endfor %}
 

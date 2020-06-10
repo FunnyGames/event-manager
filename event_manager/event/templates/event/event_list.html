@@ -12,11 +12,10 @@
       <b>This event is officially cancelled.</b>
     </div>
     {% endif %}
-    <div class="article-metadata">
-      <small class="text-muted">{{ event.start_date }}</small>
-    </div>
-    <p class="article-content">Event ID: {{ event.id }}</p>
     <h2><a class="article-title" href="{% url 'event-view' event.id %}">{{ event.title }}</a></h2>
+    {% if user.is_staff %}
+    <p class="" style="font-size: small;">Event ID: {{ event.id }}</p>
+    {% endif %}
     <p class="article-content">{{ event.description }}</p>
     <p class="article-content">
       <b>Date range:</b> {{ event.start_date }} - {{ event.end_date }}

@@ -1,7 +1,5 @@
 {% extends "event/base.html" %}
 {% block content %}
-<h1>Recommended Event List:</h1>
-
 {% for event in events %}
 {% for cancelled in cancelled_events %}
 {% if event.id != cancelled.EventId %}
@@ -10,10 +8,9 @@
 <hr />
 <article class="media content-section">
     <div class="media-body">
-        <div class="article-metadata {{c_class}}">
-            <div class="d-flex"
-                style="align-items: center; background-color: orange; border: 1px; border-radius: 0.5em;">
-                <strong style="color: white; margin-left: 0.5em;">RECOMMENDED BY STAFF:</strong>
+        <div class="article-metadata" style="margin-bottom: 1em;">
+            <div class="d-flex" style="align-items: center; border-left: 0.5em solid; border-color: purple;">
+                <strong style="color: black; margin-left: 0.5em;">RECOMMENDED BY STAFF:</strong>
                 <span style="padding-left: 0.5em; font-style: italic;">"{{ rec.text }}"</span>
                 <span style="padding-left: 0.5em; font-weight: bold;">by {{ rec.user }}</span>
             </div>
@@ -23,11 +20,10 @@
             <b>This event is officially cancelled.</b>
         </div>
         {% endif %}
-        <div class="article-metadata">
-            <small class="text-muted">{{ event.start_date }}</small>
-        </div>
-        <p class="article-content">Event ID: {{ event.id }}</p>
         <h2><a class="article-title" href="{% url 'event-view' event.id %}">{{ event.title }}</a></h2>
+        {% if user.is_staff %}
+        <p class="" style="font-size: small;">Event ID: {{ event.id }}</p>
+        {% endif %}
         <p class="article-content">{{ event.description }}</p>
         <p class="article-content">
             <b>Date range:</b> {{ event.start_date }} - {{ event.end_date }}

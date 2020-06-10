@@ -1,6 +1,5 @@
 {% extends "event/base.html" %}
 {% block content %}
-<h1>My events:</h1>
 
 {% for event in events %}
 {% for cancelled in cancelled_events %}
@@ -15,16 +14,15 @@
             <b>This event is officially cancelled.</b>
         </div>
         {% endif %}
-        <div class="article-metadata">
-            <small class="text-muted">{{ event.start_date }}</small>
-        </div>
         <div style="float: right">
             <a class="btn btn-outline-info" href="{% url 'event-remove_my_event' event.id %}">
                 <b>Remove from my events</b>
             </a>
         </div>
-        <p class="article-content">Event ID: {{ event.id }}</p>
         <h2><a class="article-title" href="{% url 'event-view' event.id %}">{{ event.title }}</a></h2>
+        {% if user.is_staff %}
+        <p class="" style="font-size: small;">Event ID: {{ event.id }}</p>
+        {% endif %}
         <p class="article-content">{{ event.description }}</p>
         <p class="article-content">
             <b>Date range:</b> {{ event.start_date }} - {{ event.end_date }}
