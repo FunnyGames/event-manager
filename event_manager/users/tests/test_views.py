@@ -74,38 +74,3 @@ class UserLogoutTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'users/logout.html')
 
-
-class UserListTest(TestCase):
-
-    def setUp(self):
-        test_user1 = User.objects.create_user(
-            username='testuser1', password='Aa123123')
-
-        test_user1.save()
-
-        test_admin = User.objects.create_superuser(
-            username='admin', password='Aa123123')
-
-        test_admin.save()
-
-    def test_view_url_exists_at_desired_location(self):
-        self.client.login(username='admin', password='Aa123123')
-        response = self.client.get(reverse('users-list'))
-        self.assertEqual(response.status_code, 200)
-
-    def test_view_uses_correct_template(self):
-        self.client.login(username='admin', password='Aa123123')
-        response = self.client.get(reverse('users-list'))
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'users/users_list.html')
-
-    def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('users-list'))
-        self.assertRedirects(
-            response, '/login/?next=/users/')
-
-    def test_redirect_if_not_superuser(self):
-        self.client.login(username='testuser1', password='Aa123123')
-        response = self.client.get(reverse('users-list'))
-        self.assertRedirects(
-            response, '/login/?next=/users/')
