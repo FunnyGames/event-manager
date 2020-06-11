@@ -177,10 +177,10 @@ def choose_comment(request, id):
             ChooseComment.objects.create(
                 EventId=EventId, CommentId=comment, user=request.user)
             messages.success(
-                request, f'LIKE Comment Successful')
+                request, 'LIKE Comment Successful')
     except:
         messages.warning(
-            request, f'ERROR - You are already liked this comment')
+            request, 'ERROR - You are already liked this comment')
 
     return redirect('event-view', id=EventId)
 
@@ -192,7 +192,7 @@ def my_events(request):
         if (eventId is not None):
             MyEvent.objects.create(EventId=eventId, user=request.user)
             messages.success(
-                request, f'Event was added to your events successfully')
+                request, 'Event was added to your events successfully')
 
     context = {
         'events': Event.objects.filter(start_date__gte=date.today()),
@@ -240,7 +240,7 @@ def remove_my_event(request, id):
                 id=myId, user_id=request.user.id, EventId=id).delete()
 
             messages.success(
-                request, f'Event was removed from your events successfully')
+                request, 'Event was removed from your events successfully')
             return redirect('event-my_events')
     context = {
         'event': get_object_or_404(Event, id=id),
@@ -269,10 +269,10 @@ def report_comment(request, id):
             ReportComment.objects.create(
                 EventId=EventId, CommentId=comment, user=request.user)
             messages.success(
-                request, f'Comment Reported Successfully')
+                request, 'Comment Reported Successfully')
     except:
         messages.warning(
-            request, f'ERROR - Already Reported?')
+            request, 'ERROR - Already Reported?')
 
     return redirect('event-view', id=EventId)
 
