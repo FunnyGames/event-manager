@@ -1,7 +1,7 @@
 from django.test import TestCase
 from ..models import Event, CancelledEvent, EventUpdates, RateEvent, MyEvent, EventComment, ReportComment, EventRecommend
 from django.contrib.auth.models import User
-
+from event_manager.event.models import ChooseComment
 
 
 class EventModelTest(TestCase):
@@ -174,7 +174,7 @@ class ReportCommentTest:
         # Set up non-modified objects used by all test methods
         # Run once to set up non-modified data for all class methods.
         user = User.objects.create(
-            username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
+            username='test1', email='test@email.com', first_name='Big', last_name='Bob',),
         ReportComment.objects.create(
             EventId=2,
             user=user,
@@ -200,7 +200,7 @@ class ChooseCommentTest:
         # Set up non-modified objects used by all test methods
         # Run once to set up non-modified data for all class methods.
         user = User.objects.create(
-            username='test1', email='test@email.com', first_name='Big', last_name='Bob'),
+            username='test1', email='test@email.com', first_name='Big', last_name='Bob',),
         ChooseComment.objects.create(
             EventId=2,
             user=user,
