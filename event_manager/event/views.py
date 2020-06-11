@@ -62,7 +62,7 @@ def recommended_event_list(request):
     return render(request, 'event/recommended_event_list.html', context)
 
 
-def view_event(request, my_id):
+def view_event(request, id):
 
     ratingForm = None
     commentForm = eventCommentForm()
@@ -75,18 +75,18 @@ def view_event(request, my_id):
         if commentForm.is_valid():
             comment = commentForm.save(commit=False)
             comment.user_id = request.user.id
-            comment.EventId = my_id
+            comment.EventId = id
             comment.save()
-            return redirect('event-view', id=my_id)
+            return redirect('event-view', id=id)
 
     if request.method == 'POST' and 'recommend_post' in request.POST:
         recommendForm = eventRecommendForm(request.POST)
         if recommendForm.is_valid():
             recommend = recommendForm.save(commit=False)
             recommend.user_id = request.user.id
-            recommend.EventId = my_id
+            recommend.EventId = id
             recommend.save()
-            return redirect('event-view', id=my_id)
+            return redirect('event-view', id=id)
 
     if request.user.id:
         my_event = MyEvent.objects.filter(EventId=id, user=request.user)
@@ -169,9 +169,9 @@ def top_rated_list(request):
 
 
 @login_required
-def choose_comment(request, my_id):
+def choose_comment(request, id):
     try:
-        comment = EventComment.objects.get(id=my_id)
+        comment = EventComment.objects.get(id=id)
         EventId = comment.EventId
         if (EventId is not None):
             ChooseComment.objects.create(
@@ -232,38 +232,38 @@ def my_events_all(request):
 
 
 @login_required
-def remove_my_event(request, my_id):
+def remove_my_event(request, id):
     if request.method == 'POST':
         myId = request.POST.get('id', None)
         if (myId is not None):
             MyEvent.objects.filter(
-                id=myId, user_id=request.user.id, EventId=my_id).delete()
+                id=myId, user_id=request.user.id, EventId=id).delete()
 
             messages.success(
                 request, f'Event was removed from your events successfully')
             return redirect('event-my_events')
     context = {
-        'event': get_object_or_404(Event, id=my_id),
-        'my_events': MyEvent.objects.filter(user_id=request.user.id, EventId=my_id)
+        'event': get_object_or_404(Event, id=id),
+        'my_events': MyEvent.objects.filter(user_id=request.user.id, EventId=id)
     }
     return render(request, 'event/confirm_remove_my_event.html', context)
 
 
 @login_required
-def delete_comment(request, my_id):
-    comment = EventComment.objects.get(id=my_id)
+def delete_comment(request, id):
+    comment = EventComment.objects.get(id=id)
     EventId = comment.EventId
-    if (my_id is not None):
+    if (id is not None):
         EventComment.objects.filter(
-            id=my_id).delete()
+            id=id).delete()
 
     return redirect('event-view', id=EventId)
 
 
 @login_required
-def report_comment(request, my_id):
+def report_comment(request, id):
     try:
-        comment = EventComment.objects.get(id=my_id)
+        comment = EventComment.objects.get(id=id)
         EventId = comment.EventId
         if (EventId is not None):
             ReportComment.objects.create(
@@ -320,11 +320,11 @@ def calendar(request):
     return render(request, 'event/calendar.html', context)
 
 
-def users_attend(request, my_id):
-    event = get_object_or_404(Event, id=my_id)
+def users_attend(request, id):
+    event = get_object_or_404(Event, id=id)
     context = {
         'event': event,
-        'users': MyEvent.objects.filter(EventId=my_id),
+        'users': MyEvent.objects.filter(EventId=id),
         'site_header': event.title,
         'site_subheader': 'Attendencies'
     }
