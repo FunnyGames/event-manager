@@ -109,6 +109,18 @@ def view_event(request, id):
 
     event = get_object_or_404(Event, id=id)
 
+    reps = ReportComment.objects.filter(EventId=id)
+    reports = []
+    for rep in reps:
+        skip = False
+        for rep2 in reports:
+            if rep.CommentId == rep2.CommentId:
+                skip = True
+                break
+        if skip:
+            continue
+        reports.append(rep)
+
     context = {
         'event': event,
         'announcements': EventUpdates.objects.filter(EventId=id),
@@ -123,7 +135,7 @@ def view_event(request, id):
         'ratingForm': ratingForm,
         'commentForm': commentForm,
         'recommendForm': recommendForm,
-        'reports': ReportComment.objects.filter(EventId=id),
+        'reports': reports,
         'chooseComment': ChooseComment.objects.filter(EventId=id),
         'site_header': event.title,
         'site_subheader': event.description,
