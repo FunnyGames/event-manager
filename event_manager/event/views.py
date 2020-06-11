@@ -1,8 +1,9 @@
+from datetime import date, timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator
-
+from django.db.models import Avg, Count
 from .models import Event
 from .models import CancelledEvent
 from .models import EventUpdates
@@ -12,9 +13,8 @@ from .models import EventComment
 from .models import EventRecommend
 from .models import ReportComment
 from .models import ChooseComment
-from django.db.models import Avg, Count
 from .forms import RateEventForm, eventCommentForm, eventRecommendForm
-from datetime import date, timedelta
+
 
 # Create your views here.
 
@@ -26,7 +26,7 @@ def home(request):
 def event_list(request):
     page = request.GET.get('page')
     limit = request.GET.get('limit')
-    if limit == None:
+    if limit is None:
         limit = 5
     else:
         limit = int(limit)
@@ -34,7 +34,7 @@ def event_list(request):
             limit = 5
 
     p = Paginator(Event.objects.all(), limit)
-    if page == None:
+    if page is None:
         page = 1
     else:
         page = int(page)
@@ -92,7 +92,7 @@ def view_event(request, id):
         my_event = MyEvent.objects.filter(EventId=id, user=request.user)
         my_rating = (RateEvent.objects.filter(
             user=request.user).filter(EventId=id).first())
-        if my_rating == None:
+        if my_rating is None:
             if request.method == 'POST' and 'rating_post' in request.POST:
                 ratingForm = RateEventForm(request.POST)
 
@@ -173,7 +173,7 @@ def choose_comment(request, id):
     try:
         comment = EventComment.objects.get(id=id)
         EventId = comment.EventId
-        if (EventId != None):
+        if (EventId is not None):
             ChooseComment.objects.create(
                 EventId=EventId, CommentId=comment, user=request.user)
             messages.success(
@@ -189,7 +189,7 @@ def choose_comment(request, id):
 def my_events(request):
     if request.method == 'POST':
         eventId = request.POST.get('EventId', None)
-        if (eventId != None):
+        if (eventId is not None):
             MyEvent.objects.create(EventId=eventId, user=request.user)
             messages.success(
                 request, f'Event was added to your events successfully')
@@ -235,7 +235,7 @@ def my_events_all(request):
 def remove_my_event(request, id):
     if request.method == 'POST':
         myId = request.POST.get('id', None)
-        if (myId != None):
+        if (myId is not None):
             MyEvent.objects.filter(
                 id=myId, user_id=request.user.id, EventId=id).delete()
 
@@ -253,7 +253,7 @@ def remove_my_event(request, id):
 def delete_comment(request, id):
     comment = EventComment.objects.get(id=id)
     EventId = comment.EventId
-    if (id != None):
+    if (id is not None):
         EventComment.objects.filter(
             id=id).delete()
 
@@ -265,7 +265,7 @@ def report_comment(request, id):
     try:
         comment = EventComment.objects.get(id=id)
         EventId = comment.EventId
-        if (EventId != None):
+        if (EventId is not None):
             ReportComment.objects.create(
                 EventId=EventId, CommentId=comment, user=request.user)
             messages.success(
