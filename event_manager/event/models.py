@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+
 
 from django.contrib.auth import get_user_model
 from django.db.models import CheckConstraint, Q, UniqueConstraint
@@ -19,7 +19,7 @@ class Event(models.Model):
     create_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return str(self.title)
 
 
 class CancelledEvent(models.Model):
@@ -75,7 +75,6 @@ class EventRecommend(models.Model):
         return str(self.text) + ' by ' + str(self.user)
 
 
-
 class MyEvent(models.Model):
     EventId = models.IntegerField(default=0)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
@@ -104,6 +103,7 @@ class ReportComment(models.Model):
 
     def __str__(self):
         return str(self.EventId) + ' - ' + str(self.user)
+
 
 class ChooseComment(models.Model):
     EventId = models.IntegerField(default=0)
