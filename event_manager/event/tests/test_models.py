@@ -1,8 +1,7 @@
 from django.test import TestCase
-from ..models import Event, CancelledEvent, EventUpdates, RateEvent, MyEvent, EventComment, ReportComment,EventRecommend
+from ..models import Event, CancelledEvent, EventUpdates, RateEvent, MyEvent, EventComment, ReportComment, EventRecommend
 from django.contrib.auth.models import User
 
-import this
 
 
 class EventModelTest(TestCase):
