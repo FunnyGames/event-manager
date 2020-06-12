@@ -1,12 +1,11 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from .email import sendResetPasswordEmail, generateKey, timeIsValid
-from django.contrib.auth.forms import UserChangeForm
 from .forms import UserRegisterForm, ResetPasswordForm, ResetPasswordEnterForm, EditProfileForm
-from django.urls import reverse
+
 
 # Create your views here.
 
@@ -40,7 +39,7 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             messages.success(
-                request, f' Your profile edit successfull')
+                request, ' Your profile edit successfull')
             return redirect('edit_profile')
     else:
         form = EditProfileForm(instance=request.user)
@@ -119,7 +118,7 @@ def adminResetPasswordEnter(request):
                         u.set_password(request.POST.get('password1'))
                         u.save()
                         messages.success(
-                            request, f'Successfully changed password')
+                            request, 'Successfully changed password')
                         return redirect('login')
                 else:
                     bad_sign = True
