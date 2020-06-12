@@ -42,7 +42,7 @@ class UserLoginTest(TestCase):
             response, '/login/?next=/profile/')
 
     def test_logged_in_uses_correct_template(self):
-        login = self.client.login(
+        self.client.login(
             username='testuser1', password='Aa123123')
         response = self.client.get(reverse('profile'))
 
@@ -55,7 +55,7 @@ class UserLoginTest(TestCase):
         self.assertTemplateUsed(response, 'users/profile.html')
 
     def test_banned_user_login(self):
-        login = self.client.login(
+        self.client.login(
             username='testuser2', password='Aa123123')
         response = self.client.get(reverse('profile'))
 
@@ -73,4 +73,3 @@ class UserLogoutTest(TestCase):
         response = self.client.get(reverse('logout'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'users/logout.html')
-
