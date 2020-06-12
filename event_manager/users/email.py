@@ -1,5 +1,6 @@
-from django.core.mail import send_mail
 import time
+from django.core.mail import send_mail
+
 
 
 def sendResetPasswordEmail(email):
@@ -9,7 +10,7 @@ def sendResetPasswordEmail(email):
     link = f'http://localhost:8000/reset/password?email={email}&key={key}&u={milliseconds}'
     send_mail(
         subject='Reset Password',
-        message=f'You received this email because you clicked reset password.\n' +
+        message='You received this email because you clicked reset password.\n' +
         'Copy the following link to address in browser:\n{link}\n' +
         'The link will be available for next 24 hours' +
         'If you did not request a reset password, please ignore this email',
@@ -32,12 +33,12 @@ def generateKey(email, t):
     key2 = email[(at + 1):]
     temp = t
     passkey = ''
-    for i in range(len(key)):
+    for i , _ in enumerate(key):
         passkey += chr((ord(key[i]) + 17) % 26 + 65)
         passkey += chr(((ord(key[i]) + (temp % 10)) % 26) + 65)
         temp = temp // 2
     temp = t
-    for i in range(len(key2)):
+    for i , _ in enumerate(key2):
         passkey += chr((ord(key2[i]) + 13) % 26 + 65)
         passkey += chr(((ord(key2[i]) + (temp // 5) % 10) % 26) + 65)
         temp = temp // 2

@@ -1,6 +1,4 @@
 from django.contrib.auth.models import User, Group
-from django.http import HttpResponse
-from django.contrib import admin
 from django.contrib.admin import AdminSite
 
 
