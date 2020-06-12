@@ -1,13 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import UserRegisterForm, ResetPasswordForm, ResetPasswordEnterForm,EditProfileForm
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from .email import sendResetPasswordEmail, generateKey, timeIsValid
-from django.urls import reverse
-
 from django.contrib.auth.forms import UserChangeForm
+from .forms import UserRegisterForm, ResetPasswordForm, ResetPasswordEnterForm, EditProfileForm
+from django.urls import reverse
 
 # Create your views here.
 
@@ -31,7 +30,7 @@ def register(request):
 @login_required
 def profile(request):
     args = {'user': request.user}
-    return render(request, 'users/profile.html',args)
+    return render(request, 'users/profile.html', args)
 
 
 def edit_profile(request):
@@ -46,7 +45,7 @@ def edit_profile(request):
     else:
         form = EditProfileForm(instance=request.user)
         args = {'form': form}
-        return render(request, 'users/edit_profile.html',args)
+        return render(request, 'users/edit_profile.html', args)
 
 
 
@@ -55,7 +54,7 @@ def edit_profile(request):
 def users(request):
     page = request.GET.get('page')
     limit = request.GET.get('limit')
-    if limit == None:
+    if limit is None:
         limit = 5
     else:
         limit = int(limit)
@@ -63,7 +62,7 @@ def users(request):
             limit = 5
 
     p = Paginator(User.objects.all(), limit)
-    if page == None:
+    if page is None:
         page = 1
     else:
         page = int(page)
@@ -109,7 +108,7 @@ def adminResetPasswordEnter(request):
         u = request.GET.get('u')
         email = request.GET.get('email')
         key = request.GET.get('key')
-        if u == None or email == None or key == None:
+        if u is None or email == None or key == None:
             bad_sign = True
         else:
             if timeIsValid(u):
@@ -130,7 +129,7 @@ def adminResetPasswordEnter(request):
         u = request.GET.get('u')
         email = request.GET.get('email')
         key = request.GET.get('key')
-        if u == None or email == None or key == None:
+        if u is None or email == None or key == None:
             bad_sign = True
         else:
             if timeIsValid(u):

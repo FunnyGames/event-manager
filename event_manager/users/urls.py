@@ -8,7 +8,5 @@ urlpatterns = [
     path('users/', views.users, name='users-list'),
     path('admin/reset/', views.adminResetPassword, name='users-admin_reset'),
     path('admin/reset/password', views.adminResetPasswordEnter, name='users-admin_reset_password'),
-    path('edit_profile/',views.edit_profile, name='edit_profile'),
-    
-    
+    path('edit_profile/', views.edit_profile, name='edit_profile'),
 ]
