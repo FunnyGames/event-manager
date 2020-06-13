@@ -117,5 +117,5 @@ class ChooseComment(models.Model):
                 fields=['user', 'EventId', 'CommentId'], name='choose_once')
         ]
 
-    def _str_(self):
-        return str(self.EventId) + ' - ' + str(self.user)
+    def __str__(self):
+        return str(self.EventId) + ' - ' + str(self.CommentId) + ' - ' + str(self.user)
