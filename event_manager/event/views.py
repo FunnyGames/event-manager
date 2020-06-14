@@ -18,6 +18,8 @@ from .forms import RateEventForm, eventCommentForm, eventRecommendForm
 
 # Create your views here.
 
+example = 123
+
 
 def home(request):
     return render(request, 'event/home.html')
