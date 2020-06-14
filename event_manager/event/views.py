@@ -20,6 +20,7 @@ from .forms import RateEventForm, eventCommentForm, eventRecommendForm
 
 example = 123
 
+print(f'hello')
 
 def home(request):
     return render(request, 'event/home.html')
